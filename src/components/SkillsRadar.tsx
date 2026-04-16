@@ -30,13 +30,15 @@ const CustomTick = ({ x, y, payload, cx, cy }: any) => {
       y={y + dy}
       textAnchor={anchor}
       dominantBaseline="central"
-      fill="#8B98A8"
+      fill="var(--muted)"
       fontSize={10.5}
       fontFamily="'JetBrains Mono', monospace"
-      letterSpacing="0.03em"
-    >
+      letterSpacing="0.03em">
       {lines.map((line: string, i: number) => (
-        <tspan key={i} x={x + dx} dy={i === 0 ? 0 : 14}>
+        <tspan
+          key={i}
+          x={x + dx}
+          dy={i === 0 ? 0 : 14}>
           {line}
         </tspan>
       ))}
@@ -51,16 +53,17 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div
         style={{
-          background: '#111722',
-          border: '1px solid #1E2A38',
-          borderRadius: '8px',
-          padding: '0.5rem 0.875rem',
+          background: "var(--bg)",
+          border: "1px solid var(--border)",
+          borderRadius: "8px",
+          padding: "0.5rem 0.875rem",
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: '0.75rem',
-        }}
-      >
-        <p style={{ color: '#8B98A8', marginBottom: '2px' }}>{skill.replace('\n', ' ')}</p>
-        <p style={{ color: '#00F5D4', fontWeight: 500 }}>{value}%</p>
+          fontSize: "0.75rem",
+        }}>
+        <p style={{ color: "var(--muted)", marginBottom: "2px" }}>
+          {skill.replace("\n", " ")}
+        </p>
+        <p style={{ color: "var(--accent)", fontWeight: 500 }}>{value}%</p>
       </div>
     );
   }
@@ -69,11 +72,17 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export default function SkillsRadar() {
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '280px' }} aria-label="Skills radar chart">
-      <ResponsiveContainer width="100%" height={280}>
-        <RadarChart data={data} margin={{ top: 16, right: 36, bottom: 16, left: 36 }}>
+    <div
+      style={{ width: "100%", height: "100%", minHeight: "280px" }}
+      aria-label="Skills radar chart">
+      <ResponsiveContainer
+        width="100%"
+        height={280}>
+        <RadarChart
+          data={data}
+          margin={{ top: 16, right: 36, bottom: 16, left: 36 }}>
           <PolarGrid
-            stroke="#1E2A38"
+            stroke="var(--border)"
             strokeDasharray="3 3"
             strokeWidth={1}
           />
@@ -85,19 +94,19 @@ export default function SkillsRadar() {
           <Radar
             name="Skills"
             dataKey="value"
-            stroke="#00F5D4"
+            stroke="var(--accent)"
             strokeWidth={1.5}
-            fill="#00F5D4"
+            fill="var(--accent)"
             fillOpacity={0.1}
             dot={{
               r: 3,
-              fill: '#00F5D4',
+              fill: "var(--accent)",
               strokeWidth: 0,
             }}
             activeDot={{
               r: 4,
-              fill: '#00F5D4',
-              stroke: 'rgba(0,245,212,0.3)',
+              fill: "var(--accent)",
+              stroke: "rgba(var(--accent-rgb), 0.3)",
               strokeWidth: 4,
             }}
           />
@@ -107,15 +116,14 @@ export default function SkillsRadar() {
 
       <p
         style={{
-          textAlign: 'center',
+          textAlign: "center",
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: '0.6875rem',
-          color: '#4A5568',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          marginTop: '0.5rem',
-        }}
-      >
+          fontSize: "0.6875rem",
+          color: "var(--muted)",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          marginTop: "0.5rem",
+        }}>
         Self-assessed proficiency
       </p>
     </div>

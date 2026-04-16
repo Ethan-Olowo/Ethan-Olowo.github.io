@@ -59,8 +59,9 @@ export default function BlogCard({
           onHoverStart={(_, info) => {
             const el = (info.target as HTMLElement).closest('div') as HTMLElement;
             if (el) {
-              el.style.borderColor = 'rgba(0, 245, 212, 0.25)';
-              el.style.boxShadow = '0 0 28px rgba(0,245,212,0.07), 0 8px 28px rgba(0,0,0,0.25)';
+              el.style.borderColor = "var(--accent-glow)";
+              el.style.boxShadow =
+                "0 0 28px var(--orb-color), 0 8px 28px rgba(0,0,0,0.25)";
             }
           }}
           onHoverEnd={(_, info) => {

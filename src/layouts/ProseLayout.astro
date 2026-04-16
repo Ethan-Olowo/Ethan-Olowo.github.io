@@ -14,7 +14,7 @@ interface Props {
   githubUrl?: string;
   liveUrl?: string;
   coverImage?: string;
-  kind: 'blog' | 'project' | string;
+  kind: 'blog' | 'project';
   backHref: string;
   backLabel: string;
 }
@@ -262,17 +262,17 @@ const formattedDate = date
   .kind-badge--blog {
     color: var(--accent);
     background: var(--accent-dim);
-    border: 1px solid rgba(0,245,212,0.2);
+    border: 1px solid var(--accent-glow);
   }
   .kind-badge--project {
-    color: #a78bfa;
-    background: rgba(167,139,250,0.1);
-    border: 1px solid rgba(167,139,250,0.2);
+    color: var(--prose-purple);
+    background: var(--prose-purple-dim);
+    border: 1px solid var(--prose-purple-dim);
   }
   .kind-badge--other {
-    color: #f59e42;
-    background: rgba(245,158,66,0.1);
-    border: 1px solid rgba(245,158,66,0.2);
+    color: var(--prose-orange);
+    background: var(--prose-orange-dim);
+    border: 1px solid var(--prose-orange-dim2);
   }
 
   .prose-title {
@@ -311,7 +311,7 @@ const formattedDate = date
     font-size: 0.6875rem;
     color: var(--accent);
     background: var(--accent-dim);
-    border: 1px solid rgba(0,245,212,0.2);
+    border: 1px solid var(--accent-glow);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
   }
@@ -398,7 +398,7 @@ const formattedDate = date
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: rgba(0,245,212,0.4);
+    text-decoration-color: var(--accent-glow);
     transition: text-decoration-color 0.2s;
   }
   .prose-body :global(a:hover) {
@@ -455,8 +455,8 @@ const formattedDate = date
 
   /* Shiki code blocks */
   .prose-body :global(pre) {
-    background: #0D1117 !important;
-    border: 1px solid var(--border);
+    background: var(--code-bg) !important;
+    border: 1px solid var(--code-border);
     border-radius: 10px;
     padding: 1.25rem 1.5rem;
     overflow-x: auto;
@@ -540,7 +540,10 @@ const formattedDate = date
     gap: 0.125rem;
   }
 
-  .toc-item { margin: 0; }
+  .toc-item { 
+    margin: 0;
+    color: var(--muted);
+  }
 
   .toc-h3 { padding-left: 0.875rem; }
 
@@ -559,7 +562,7 @@ const formattedDate = date
   }
   .toc-link:hover { color: var(--text); }
   .toc-link--active {
-    color: var(--accent);
-    border-left-color: var(--accent);
+    color: var(--toc-active);
+    border-left-color: var(--toc-active);
   }
 </style>

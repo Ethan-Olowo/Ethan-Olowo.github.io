@@ -81,7 +81,7 @@ export default function TagFilter({
               letterSpacing: "0.03em",
               padding: "0.35rem 0.875rem",
               borderRadius: "100px",
-              border: `1px solid ${active === tag ? "rgba(0,245,212,0.4)" : "var(--border)"}`,
+              border: `1px solid ${active === tag ? "var(--accent)" : "var(--border)"}`,
               background: active === tag ? "var(--accent-dim)" : "transparent",
               color: active === tag ? "var(--accent)" : "var(--muted)",
               cursor: "pointer",

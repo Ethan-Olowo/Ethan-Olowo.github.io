@@ -253,7 +253,7 @@ const featuredProjects = allProjects
     align-items: center;
     gap: 0.5rem;
     background: var(--accent-dim);
-    border: 1px solid rgba(0, 245, 212, 0.25);
+    border: 1px solid var(--accent-glow);
     border-radius: 100px;
     padding: 0.3rem 0.875rem;
     margin-bottom: 2rem;
@@ -404,7 +404,7 @@ const featuredProjects = allProjects
 
   .tech-pill:hover {
     color: var(--accent);
-    border-color: rgba(0,245,212,0.3);
+    border-color: var(--accent-glow);
   }
 
   /* ── SECTIONS ─────────────────────────────────────────────── */
@@ -473,7 +473,7 @@ const featuredProjects = allProjects
     transition: border-color 0.2s;
   }
 
-  .skill-card:hover { border-color: rgba(0,245,212,0.25); }
+  .skill-card:hover { border-color: var(--accent-glow); }
 
   .skill-card-header {
     display: flex;
@@ -602,8 +602,8 @@ const featuredProjects = allProjects
   }
 
   .stat-card:hover {
-    border-color: rgba(0,245,212,0.3);
-    box-shadow: 0 0 20px rgba(0,245,212,0.06);
+    border-color: var(--accent-glow);
+    box-shadow: var(--stat-hover-shadow);
   }
 
   .stat-value {

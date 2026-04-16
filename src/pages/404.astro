@@ -122,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
     z-index: 2;
     width: 100%;
     max-width: 600px;
-    background: #0D1117;
+    background: var(--code-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
@@ -136,7 +136,7 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     gap: 0.4rem;
     padding: 0.625rem 1rem;
-    background: #161B22;
+    background: var(--bg-hover);
     border-bottom: 1px solid var(--border);
   }
 
@@ -145,13 +145,13 @@ import Layout from '../layouts/Layout.astro';
     height: 12px;
     border-radius: 50%;
   }
-  .dot-red    { background: #FF5F57; }
-  .dot-yellow { background: #FFBD2E; }
-  .dot-green  { background: #28CA42; }
+  .dot-red    { background: var(--error-red); }
+  .dot-yellow { background: var(--warning-yellow); }
+  .dot-green  { background: var(--success-green); }
 
   .terminal-title {
     font-size: 0.6875rem;
-    color: #4A5568;
+    color: var(--gray-text);
     margin-left: auto;
     letter-spacing: 0.04em;
   }
@@ -180,7 +180,7 @@ import Layout from '../layouts/Layout.astro';
 
   .prompt::after {
     content: ' $';
-    color: #4A5568;
+    color: var(--gray-text);
   }
 
   .cmd {
@@ -219,13 +219,13 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.6;
   }
 
-  .dim { color: #363D4A; }
+  .dim { color: var(--gray-text-alt); }
 
   .error-code {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    color: #FF6B6B;
+    color: var(--error-red-soft);
     margin-bottom: 0.25rem;
   }
 
@@ -233,15 +233,15 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.1em;
-    background: rgba(255, 107, 107, 0.12);
-    border: 1px solid rgba(255,107,107,0.25);
-    color: #FF6B6B;
+    background: rgba(255, 107, 107, 0.12); /* Could be a new var if needed */
+    border: 1px solid rgba(255,107,107,0.25); /* Could be a new var if needed */
+    color: var(--error-red-soft);
     padding: 0.1rem 0.4rem;
     border-radius: 3px;
   }
 
   .key {
-    color: #4A5568;
+    color: var(--gray-text);
     display: inline-block;
     width: 8ch;
   }
@@ -256,7 +256,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .path-value {
-    color: #FF9D3D;
+    color: var(--warning-yellow-alt);
   }
 
   /* CTA */

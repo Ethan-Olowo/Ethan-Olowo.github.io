@@ -25,20 +25,34 @@ const base = '';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0B0F14" />
-
+    <meta name="theme-color" content="#0B0F14" id="theme-color-meta" />
+ 
+    <!-- Apply saved theme before first paint to prevent flash -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          // Default is always dark unless user has explicitly chosen light
+          var theme = saved === 'light' ? 'light' : 'dark';
+          var html = document.documentElement;
+          html.classList.remove('dark', 'light');
+          html.classList.add(theme);
+        } catch (e) {}
+      })();
+    </script>
+ 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${base}${ogImage}`} />
     <meta property="og:type" content="website" />
-
+ 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${base}${ogImage}`} />
-
+ 
     <!-- Fonts: Syne (display) + JetBrains Mono (code) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -46,30 +60,189 @@ const base = '';
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap"
       rel="stylesheet"
     />
-
+ 
     <title>{title}</title>
-
+ 
     <style is:global>
-      :root {
-        --bg:       #0B0F14;
-        --bg-card:  #111722;
-        --bg-hover: #161D28;
-        --border:   #1E2A38;
-        --text:     #E6EDF3;
-        --muted:    #8B98A8;
-        --accent:   #00F5D4;
-        --accent-dim: rgba(0, 245, 212, 0.12);
-        --accent-glow: rgba(0, 245, 212, 0.25);
-        --font-ui:  'Syne', sans-serif;
-        --font-mono: 'JetBrains Mono', monospace;
+      /* ── DARK THEME (default) ───────────────────────────────── */
+      :root,
+      html.dark {
+        --bg:              #0B0F14;
+        --bg-card:         #111722;
+        --bg-hover:        #161D28;
+        --border:          #1E2A38;
+        --text:            #E6EDF3;
+        --muted:           #8B98A8;
+        --accent:          #00F5D4;
+        --accent-dim:      rgba(0, 245, 212, 0.12);
+        --accent-glow:     rgba(0, 245, 212, 0.25);
+        --accent-secondary: #00F5D4;
+ 
+        /* Dark-only decorative vars */
+        --noise-opacity:   0.025;
+        --grid-opacity:    0.35;
+        --orb-color:       rgba(0, 245, 212, 0.07);
+        --navbar-scrolled: rgba(11, 15, 20, 0.88);
+        --shadow-card:     0 8px 32px rgba(0, 0, 0, 0.35);
+        --shadow-glow:     0 0 32px rgba(0, 245, 212, 0.08);
+ 
+        /* Badge colors */
+        --badge-bg:        rgba(0, 245, 212, 0.1);
+        --badge-border:    rgba(0, 245, 212, 0.25);
+        --badge-text:      var(--accent);
+        --badge-dot:       var(--accent);
+ 
+        /* Code blocks */
+        --code-bg:         #0D1117;
+        --code-border:     var(--border);
+ 
+        /* ToC active */
+        --toc-active:      var(--accent);
+ 
+        /* Selection */
+        --selection-bg:    var(--accent);
+        --selection-text:  var(--bg);
+ 
+        /* Stat card hover shadow */
+        --stat-hover-shadow: 0 0 20px rgba(0, 245, 212, 0.06);
+        /* Custom project colors */
+        --prose-purple: #a78bfa;
+        --prose-purple-dim: rgba(167,139,250,0.1);
+        --prose-orange: #f59e42;
+        --prose-orange-dim: rgba(245,158,66,0.1);
+        --prose-orange-dim2: rgba(245,158,66,0.2);
+        --hero-blue: #3245ff;
+        --hero-purple: #bc52ee;
+        --hero-pink: #f041ff;
+        --hero-light-pink: #f3cddd;
+        --hero-light-pink2: #f5cee7;
+        --error-red: #d83333;
+        --error-red-alt: #FF5F57;
+        --error-red-soft: #FF6B6B;
+        --warning-yellow: #FFBD2E;
+        --warning-yellow-alt: #FF9D3D;
+        --success-green: #28CA42;
+        --gray-text: #4A5568;
+        --gray-text-alt: #363D4A;
+        --gray-text2: #4b5563;
+        --svg-bg: #17191E;
       }
-
+ 
+      /* ── LIGHT THEME ────────────────────────────────────────── */
+      html.light {
+        --bg:              #f7efe9;
+        --bg-card:         #fdf6f0;
+        --bg-hover:        #f0e6de;
+        --border:          #d4c4b8;
+        --text:            #4a3f35;
+        --muted:           #7a6a60;
+        --accent:          #2f5d50;
+        --accent-dim:      rgba(47, 93, 80, 0.1);
+        --accent-glow:     rgba(47, 93, 80, 0.2);
+        --accent-secondary: #f2b8a0;
+ 
+        /* Light-only decorative vars */
+        --noise-opacity:   0.018;
+        --grid-opacity:    0.18;
+        --orb-color:       rgba(168, 213, 194, 0.35);
+        --navbar-scrolled: rgba(247, 239, 233, 0.92);
+        --shadow-card:     0 4px 20px rgba(74, 63, 53, 0.1);
+        --shadow-glow:     0 0 28px rgba(47, 93, 80, 0.12);
+ 
+        /* Badge */
+        --badge-bg:        rgba(47, 93, 80, 0.08);
+        --badge-border:    rgba(47, 93, 80, 0.22);
+        --badge-text:      #2f5d50;
+        --badge-dot:       #7a9d7e;
+ 
+        /* Code blocks */
+        --code-bg:         #eee7e0;
+        --code-border:     #c8b8aa;
+ 
+        /* ToC active */
+        --toc-active:      #2f5d50;
+ 
+        /* Selection */
+        --selection-bg:    #a8d5c2;
+        --selection-text:  #2f5d50;
+ 
+        /* Stat card hover shadow */
+        --stat-hover-shadow: 0 4px 16px rgba(47, 93, 80, 0.12);
+        /* Custom project colors */
+        --prose-purple: #a78bfa;
+        --prose-purple-dim: rgba(167,139,250,0.1);
+        --prose-orange: #f59e42;
+        --prose-orange-dim: rgba(245,158,66,0.1);
+        --prose-orange-dim2: rgba(245,158,66,0.2);
+        --hero-blue: #3245ff;
+        --hero-purple: #bc52ee;
+        --hero-pink: #f041ff;
+        --hero-light-pink: #f3cddd;
+        --hero-light-pink2: #f5cee7;
+        --error-red: #FF5F57;
+        --error-red-alt: #d83333;
+        --error-red-soft: #FF6B6B;
+        --warning-yellow: #FF9D3D;
+        --warning-yellow-alt: #FFBD2E;
+        --success-green: #28CA42;
+        --gray-text: #4b5563;
+        --gray-text-alt: #363D4A;
+        --gray-text2: #4A5568;
+        --svg-bg: #17191E;
+      }
+ 
+      /* ── RESET ──────────────────────────────────────────────── */
       *, *::before, *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
-
+ 
+      /* ── THEME TRANSITION ───────────────────────────────────── */
+      /*
+        Applied only to structural elements — not animations —
+        so fade-up keyframes are unaffected.
+      */
+      html {
+        transition:
+          background-color 0.35s ease,
+          color 0.35s ease;
+      }
+ 
+      body,
+      .navbar,
+      .footer,
+      .mobile-menu {
+        transition:
+          background-color 0.35s ease,
+          border-color 0.35s ease;
+      }
+ 
+      /* Cards, borders, backgrounds transition smoothly */
+      [class*="card"],
+      [class*="skill"],
+      [class*="stat"],
+      [class*="badge"],
+      [class*="tag"],
+      [class*="pill"],
+      [class*="btn"],
+      [class*="cta"],
+      [class*="link"],
+      [class*="nav"],
+      [class*="toc"],
+      [class*="prose"],
+      [class*="related"],
+      [class*="post-nav"],
+      [class*="social"],
+      [class*="tech"] {
+        transition:
+          background-color 0.35s ease,
+          border-color 0.35s ease,
+          color 0.35s ease,
+          box-shadow 0.35s ease;
+      }
+ 
+      /* ── BASE ───────────────────────────────────────────────── */
       html {
         background-color: var(--bg);
         color: var(--text);
@@ -77,84 +250,196 @@ const base = '';
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-
+ 
       body {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
+        background-color: var(--bg);
       }
-
-      main {
-        flex: 1;
+ 
+      main { flex: 1; }
+ 
+      /* ── FONTS ──────────────────────────────────────────────── */
+      :root {
+        --font-ui:   'Syne', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
       }
-
-      /* Scrollbar */
+ 
+      /* ── SCROLLBAR ──────────────────────────────────────────── */
       ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: var(--bg); }
       ::-webkit-scrollbar-thumb {
         background: var(--border);
         border-radius: 3px;
+        transition: background 0.3s;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-      }
-
-      /* Selection */
+      ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+ 
+      /* ── SELECTION ──────────────────────────────────────────── */
       ::selection {
-        background: var(--accent);
-        color: var(--bg);
+        background: var(--selection-bg);
+        color: var(--selection-text);
       }
-
-      /* Focus ring */
+ 
+      /* ── FOCUS RING ─────────────────────────────────────────── */
       :focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 3px;
         border-radius: 3px;
       }
-
-      /* Noise overlay for depth */
+ 
+      /* ── NOISE OVERLAY ──────────────────────────────────────── */
       body::before {
         content: '';
         position: fixed;
         inset: 0;
         pointer-events: none;
         z-index: 1000;
-        opacity: 0.025;
+        opacity: var(--noise-opacity);
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        transition: opacity 0.35s ease;
       }
-
-      /* Container */
+ 
+      /* ── LIGHT MODE: extra organic warmth ───────────────────── */
+      /* Soft paper grain distinct from the dark noise */
+      html.light body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 999;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+      }
+ 
+      /* ── CONTAINER ──────────────────────────────────────────── */
       .container {
         width: 100%;
         max-width: 1120px;
         margin-inline: auto;
         padding-inline: 1.25rem;
       }
-
       @media (min-width: 768px) {
         .container { padding-inline: 2rem; }
       }
-
-      /* Fade-in animation */
+ 
+      /* ── ANIMATIONS ─────────────────────────────────────────── */
       @keyframes fadeUp {
         from { opacity: 0; transform: translateY(18px); }
         to   { opacity: 1; transform: translateY(0); }
       }
-
+ 
       .fade-up {
         animation: fadeUp 0.6s ease forwards;
         opacity: 0;
       }
-
+ 
       .delay-1 { animation-delay: 0.1s; }
       .delay-2 { animation-delay: 0.2s; }
       .delay-3 { animation-delay: 0.3s; }
       .delay-4 { animation-delay: 0.45s; }
       .delay-5 { animation-delay: 0.6s; }
+ 
+      /* ── LIGHT MODE: code blocks ─────────────────────────────── */
+      html.light .prose-body :global(pre) {
+        background: var(--code-bg) !important;
+        border-color: var(--code-border);
+      }
+ 
+      html.light .prose-body :global(code) {
+        background: var(--code-bg);
+        border-color: var(--code-border);
+        color: #2f5d50;
+      }
+ 
+      /* ── LIGHT MODE: hero grid decoration ────────────────────── */
+      html.light .hero-orb {
+        background: radial-gradient(circle, var(--orb-color) 0%, transparent 70%);
+      }
+ 
+      /* ── LIGHT MODE: stat cards ──────────────────────────────── */
+      html.light .stat-card:hover {
+        border-color: rgba(47, 93, 80, 0.3);
+        box-shadow: var(--stat-hover-shadow);
+      }
+ 
+      html.light .stat-value { color: var(--accent); }
+ 
+      /* ── LIGHT MODE: kind badge (project) ────────────────────── */
+      html.light .kind-badge--project {
+        color: #b5632a;
+        background: rgba(242, 184, 160, 0.2);
+        border-color: rgba(242, 184, 160, 0.45);
+      }
+ 
+      /* ── LIGHT MODE: skill fill gradient ─────────────────────── */
+      html.light .skill-fill {
+        background: linear-gradient(90deg, #2f5d50, #7a9d7e);
+      }
+ 
+      /* ── LIGHT MODE: availability badge ──────────────────────── */
+      html.light .hero-badge {
+        background: var(--badge-bg);
+        border-color: var(--badge-border);
+      }
+      html.light .badge-text { color: var(--badge-text); }
+      html.light .badge-dot {
+        background: var(--badge-dot);
+        box-shadow: 0 0 6px rgba(122, 157, 126, 0.5);
+      }
+ 
+      /* ── LIGHT MODE: terminal (404) override ────────────────── */
+      html.light .terminal {
+        background: #fdf6f0;
+        border-color: #d4c4b8;
+        box-shadow: 0 16px 60px rgba(74, 63, 53, 0.15);
+      }
+      html.light .terminal-bar {
+        background: #f0e6de;
+        border-bottom-color: #d4c4b8;
+      }
+      html.light .terminal-title { color: #9a8a80; }
+      html.light .prompt { color: #2f5d50; }
+      html.light .val.accent { color: #2f5d50; }
+      html.light .path-value { color: #b5632a; }
+      html.light .dim { color: #c4b0a6; }
+      html.light .bg-code { -webkit-text-stroke-color: #d4c4b8; }
+ 
+      /* ── LIGHT MODE: section academic background ─────────────── */
+      html.light .section-academic {
+        background: linear-gradient(135deg, #f0e6de 0%, #f7efe9 100%);
+      }
+ 
+      /* ── LIGHT MODE: project/blog tag pills (accent) ─────────── */
+      html.light .prose-tag {
+        color: #2f5d50;
+        background: rgba(47, 93, 80, 0.08);
+        border-color: rgba(47, 93, 80, 0.2);
+      }
+ 
+      /* ── LIGHT MODE: related-tag neutral pills ───────────────── */
+      html.light .related-tag {
+        color: #7a6a60;
+        background: #f0e6de;
+        border-color: #d4c4b8;
+      }
+ 
+      /* ── LIGHT MODE: footer-sub ──────────────────────────────── */
+      html.light .footer-sub { color: #9a8a80; }
+ 
+      /* ── LIGHT MODE: CTA primary (green fill) ────────────────── */
+      html.light .cta-primary {
+        background: var(--accent);
+        color: #f7efe9;
+      }
+      html.light .cta-primary:hover {
+        box-shadow: 0 0 20px rgba(47, 93, 80, 0.3), 0 4px 16px rgba(0,0,0,0.12);
+      }
     </style>
   </head>
-
+ 
   <body>
     <Navbar />
     <main>

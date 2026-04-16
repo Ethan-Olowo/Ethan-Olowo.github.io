@@ -114,7 +114,7 @@ export default function ProjectCard({
               onMouseEnter={(e) => {
                 const a = e.currentTarget;
                 a.style.color = "var(--accent)";
-                a.style.borderColor = "rgba(0,245,212,0.3)";
+                a.style.borderColor = "var(--badge-border)";
                 a.style.background = "var(--accent-dim)";
               }}
               onMouseLeave={(e) => {
@@ -147,7 +147,7 @@ export default function ProjectCard({
               onMouseEnter={(e) => {
                 const a = e.currentTarget;
                 a.style.color = "var(--accent)";
-                a.style.borderColor = "rgba(0,245,212,0.3)";
+                a.style.borderColor = "var(--badge-border)";
                 a.style.background = "var(--accent-dim)";
               }}
               onMouseLeave={(e) => {
@@ -189,7 +189,7 @@ export default function ProjectCard({
               fontWeight: 400,
               color: "var(--accent)",
               background: "var(--accent-dim)",
-              border: "1px solid rgba(0,245,212,0.2)",
+              border: "1px solid var(--accent-glow)",
               padding: "0.2rem 0.5rem",
               borderRadius: "4px",
               letterSpacing: "0.03em",
@@ -231,9 +231,8 @@ export default function ProjectCard({
       const el = e.target as HTMLElement;
       const card = el.closest("article") as HTMLElement;
       if (card) {
-        card.style.borderColor = "rgba(0, 245, 212, 0.3)";
-        card.style.boxShadow =
-          "0 0 32px rgba(0, 245, 212, 0.08), 0 8px 32px rgba(0,0,0,0.3)";
+        card.style.borderColor = "var(--badge-border)";
+        card.style.boxShadow = "var(--shadow-glow), 0 8px 32px rgba(0,0,0,0.3)";
       }
     },
     onHoverEnd: (e: any) => {
