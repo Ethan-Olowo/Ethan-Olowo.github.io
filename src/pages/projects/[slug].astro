@@ -1,0 +1,120 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProseLayout from '../../layouts/ProseLayout.astro';
+
+/**
+ * getStaticPaths is required for dynamic SSG routes in Astro.
+ * It tells Astro which slugs to pre-render at build time.
+ */
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { data, slug } = project;
+
+// Render the MDX content
+const { Content } = await project.render();
+
+// Find adjacent projects for prev/next navigation
+const allProjects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const currentIndex = allProjects.findIndex((p) => p.slug === slug);
+const prevProject = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
+const nextProject = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
+---
+
+<Layout
+  title={`${data.title} — Projects`}
+  description={data.description}
+  ogImage={data.coverImage}
+>
+  <ProseLayout
+    title={data.title}
+    description={data.description}
+    tags={data.tags}
+    githubUrl={data.githubUrl}
+    liveUrl={data.liveUrl}
+    coverImage={data.coverImage}
+    kind="project"
+    backHref="/projects"
+    backLabel="All Projects"
+  >
+    <Content />
+  </ProseLayout>
+
+  <!-- Prev / Next navigation -->
+  {(prevProject || nextProject) && (
+    <nav class="post-nav" aria-label="Project navigation">
+      <div class="container post-nav-inner">
+        {prevProject ? (
+          <a href={`/projects/${prevProject.slug}`} class="post-nav-link post-nav-link--prev">
+            <span class="nav-dir">← Previous</span>
+            <span class="nav-title">{prevProject.data.title}</span>
+          </a>
+        ) : <div />}
+
+        {nextProject ? (
+          <a href={`/projects/${nextProject.slug}`} class="post-nav-link post-nav-link--next">
+            <span class="nav-dir">Next →</span>
+            <span class="nav-title">{nextProject.data.title}</span>
+          </a>
+        ) : <div />}
+      </div>
+    </nav>
+  )}
+</Layout>
+
+<style>
+  .post-nav {
+    border-top: 1px solid var(--border);
+    padding-block: 2rem;
+    margin-top: 1rem;
+  }
+
+  .post-nav-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .post-nav-link:hover {
+    border-color: rgba(0,245,212,0.3);
+    background: var(--bg-card);
+  }
+
+  .post-nav-link--next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .nav-dir {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+</style>

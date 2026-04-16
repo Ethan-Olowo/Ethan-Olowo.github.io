@@ -1,0 +1,621 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard';
+import SkillsRadar from '../components/SkillsRadar';
+
+import { getCollection } from 'astro:content';
+
+// Fetch featured projects from the content collection
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured && !p.data.draft)
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Layout>
+  <!-- ────────────────────────────── HERO ────────────────────────────── -->
+  <section class="hero" aria-label="Introduction">
+    <div class="container hero-inner">
+      <!-- Status badge -->
+      <div class="hero-badge fade-up delay-1">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span class="badge-text">Available for opportunities</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="hero-title fade-up delay-2">
+        Ethan Olowo
+        <br />
+        <span class="hero-title-accent">Data, AI/ML & Full-Stack</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="hero-sub fade-up delay-3">
+        Technologist passionate about building data-driven solutions at the intersection of AI/ML, full-stack development, and business strategy. Experienced in leading projects that deliver real-world impact through innovation and technical excellence.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas fade-up delay-4">
+        <a href="/projects" class="cta-primary">
+          View Projects
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="/contact" class="cta-secondary">
+          <!-- TODO: Replace href with /contact or mailto -->
+          Get in touch
+        </a>
+        <a
+          href="/resume.pdf"
+          class="cta-ghost"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Download resume (PDF)"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1v8M3 6l4 4 4-4M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Resume
+        </a>
+      </div>
+
+      <!-- Tech strip -->
+      <div class="tech-strip fade-up delay-5" aria-label="Tech stack">
+        {['Python', 'Scikit-learn', 'FastAPI', 'Flutter', 'ReactJS', 'C#', 'Laravel', 'SQL', 'Docker', 'Git', 'AWS', 'Firebase', 'MongoDB'].map(tech => (
+          <span class="tech-pill">{tech}</span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Grid decoration -->
+    <div class="hero-grid" aria-hidden="true"></div>
+    <!-- Orb -->
+    <div class="hero-orb" aria-hidden="true"></div>
+  </section>
+
+  <!-- ───────────────────────────── SKILLS ──────────────────────────── -->
+  <section class="section" id="skills" aria-labelledby="skills-heading">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Capabilities</p>
+        <h2 class="section-title" id="skills-heading">Skill Profile</h2>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Radar chart (React island) -->
+        <div class="skills-radar-wrap">
+          <SkillsRadar client:visible />
+        </div>
+
+        <!-- Skill detail cards -->
+        <div class="skills-details">
+          {[
+            {
+              label: 'Data Science & AI',
+              level: 90,
+              items: ['Python', 'Scikit-learn', 'R', 'Generative AI', 'Sentence Transformers', 'Model Versioning'],
+            },
+            {
+              label: 'Data Engineering & BI',
+              level: 85,
+              items: ['SQL (SQL Server, MySQL, Supabase)', 'PowerBI', 'Firebase', 'MongoDB'],
+            },
+            {
+              label: 'Software Development',
+              level: 85,
+              items: ['Flutter', 'ReactJS', 'C#', 'Laravel', 'FastAPI', 'Flask'],
+            },
+            {
+              label: 'DevOps & Tools',
+              level: 80,
+              items: ['Docker', 'Git/GitHub', 'Linux Terminal', 'AWS'],
+            },
+          ].map(({ label, level, items }) => (
+            <article class="skill-card">
+              <div class="skill-card-header">
+                <span class="skill-label">{label}</span>
+                <span class="skill-pct">{level}%</span>
+              </div>
+              <div class="skill-bar" role="progressbar" aria-valuenow={level} aria-valuemin={0} aria-valuemax={100} aria-label={`${label} proficiency`}>
+                <div class="skill-fill" style={`width: ${level}%`}></div>
+              </div>
+              <ul class="skill-items" aria-label={`${label} technologies`}>
+                {items.map(item => (
+                  <li class="skill-item">{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────── PROJECTS ──────────────────────────── -->
+  <section class="section" id="projects" aria-labelledby="projects-heading">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Work</p>
+        <h2 class="section-title" id="projects-heading">Featured Projects</h2>
+      </div>
+
+
+      <div class="projects-grid">
+        {featuredProjects.length > 0 ? (
+          featuredProjects.map(({ data, slug }, i) => (
+            <ProjectCard
+              client:visible
+              title={data.title}
+              description={data.description}
+              tags={data.tags}
+              githubUrl={data.githubUrl}
+              liveUrl={data.liveUrl}
+              coverImage={data.coverImage}
+              index={i}
+              slug={slug}
+            />
+          ))
+        ) : (
+          <p>No featured projects found.</p>
+        )}
+      </div>
+
+      <div class="projects-cta">
+        <a href="/projects" class="cta-secondary">
+          View all projects →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────── ACADEMIC ──────────────────────────── -->
+  <section class="section section-academic" id="about" aria-labelledby="about-heading">
+    <div class="container academic-inner">
+      <div class="academic-text">
+        <p class="section-label">Background</p>
+        <h2 class="section-title" id="about-heading">
+          Operating at the<br />
+          intersection of AI<br />
+          &amp; Systems
+        </h2>
+        <p class="academic-body">
+          I’m Ethan Olowo, a technologist passionate about building data-driven solutions at the intersection of AI/ML, full-stack development, and business strategy. I thrive on solving complex, high-impact problems—especially those that empower organizations to make smarter decisions and deliver real-world value. My work is driven by curiosity, technical excellence, and a desire to lead teams that build for both innovation and reliability. 
+        </p>
+        <a href="/about" class="cta-secondary" style="width: fit-content;">
+          More about me →
+        </a>
+      </div>
+
+      <aside class="academic-stats" aria-label="Key stats">
+        {[
+          { value: '3+', label: 'Years building' },
+          { value: '12+', label: 'Projects shipped' },
+          { value: '4', label: 'Core domains' },
+          { value: '∞', label: 'Curiosity' },
+        ].map(({ value, label }) => (
+          <div class="stat-card">
+            <span class="stat-value">{value}</span>
+            <span class="stat-label">{label}</span>
+          </div>
+        ))}
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    padding-block: 7rem 5rem;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+  }
+
+  /* Grid background */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse 70% 100% at 0% 0%, black 30%, transparent 80%);
+  }
+
+  /* Accent orb */
+  .hero-orb {
+    position: absolute;
+    top: -80px;
+    right: -120px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,245,212,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  /* Badge */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 245, 212, 0.25);
+    border-radius: 100px;
+    padding: 0.3rem 0.875rem;
+    margin-bottom: 2rem;
+  }
+
+  .badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .badge-text {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  /* Title */
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title-accent {
+    color: var(--accent);
+    -webkit-text-stroke: 0;
+  }
+
+  /* Sub */
+  .hero-sub {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+
+  .mono-highlight {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: var(--text);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+  }
+
+  .break-sm { display: none; }
+  @media (min-width: 640px) { .break-sm { display: block; } }
+
+  /* CTAs */
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.25s, transform 0.2s;
+  }
+
+  .cta-primary:hover {
+    box-shadow: 0 0 24px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+  }
+
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.7rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    transition: color 0.2s;
+  }
+
+  .cta-ghost:hover { color: var(--accent); }
+
+  /* Tech strip */
+  .tech-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tech-pill {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.625rem;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tech-pill:hover {
+    color: var(--accent);
+    border-color: rgba(0,245,212,0.3);
+  }
+
+  /* ── SECTIONS ─────────────────────────────────────────────── */
+  .section {
+    padding-block: 5rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  /* ── SKILLS ───────────────────────────────────────────────── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .skills-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .skills-radar-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skills-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .skill-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover { border-color: rgba(0,245,212,0.25); }
+
+  .skill-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .skill-pct {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .skill-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 0.875rem;
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), rgba(0,245,212,0.5));
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .skill-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    list-style: none;
+  }
+
+  .skill-item {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── PROJECTS ─────────────────────────────────────────────── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .projects-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .projects-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  /* ── ACADEMIC ─────────────────────────────────────────────── */
+  .section-academic {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg) 100%);
+  }
+
+  .academic-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .academic-inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  .academic-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .academic-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 480px;
+  }
+
+  .academic-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .academic-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(0,245,212,0.3);
+    box-shadow: 0 0 20px rgba(0,245,212,0.06);
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+</style>

@@ -1,0 +1,315 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
+];
+
+// TODO: Replace with your resume URL
+const resumeUrl = '/resume.pdf';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="navbar" id="navbar" role="banner">
+  <div class="container nav-inner">
+    <!-- Wordmark -->
+    <a href="/" class="wordmark" aria-label="Home">
+      <span class="wordmark-bracket">[</span>
+      <span class="wordmark-name">EO</span>
+      <span class="wordmark-bracket">]</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="nav-links" aria-label="Main navigation">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class={`nav-link ${currentPath === href || (href !== '/' && currentPath.startsWith(href)) ? 'nav-link--active' : ''}`}
+          aria-current={currentPath === href ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- CTA + Hamburger -->
+    <div class="nav-right">
+      <a href={resumeUrl} class="btn-resume" target="_blank" rel="noopener noreferrer" aria-label="Download resume (opens in new tab)">
+        Resume
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <button
+        class="hamburger"
+        id="hamburger"
+        aria-label="Toggle mobile menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Mobile navigation">
+    <nav class="mobile-nav">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class={`mobile-link ${currentPath === href ? 'mobile-link--active' : ''}`}
+          aria-current={currentPath === href ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
+      <a href={resumeUrl} class="mobile-resume" target="_blank" rel="noopener noreferrer">
+        Download Resume ↗
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('hamburger') as HTMLButtonElement;
+  const mobileMenu = document.getElementById('mobile-menu') as HTMLElement;
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', String(!isOpen));
+    mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    hamburger.classList.toggle('is-open');
+    mobileMenu.classList.toggle('is-open');
+  });
+
+  // Close on link click
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.classList.remove('is-open');
+      mobileMenu.classList.remove('is-open');
+    });
+  });
+
+  // Navbar scroll shadow
+  const navbar = document.getElementById('navbar') as HTMLElement;
+  const onScroll = () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: transparent;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .navbar.scrolled {
+    background: rgba(11, 15, 20, 0.85);
+    border-bottom-color: var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  /* Wordmark */
+  .wordmark {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    transition: color 0.2s;
+  }
+  .wordmark:hover { color: var(--accent); }
+  .wordmark-bracket { color: var(--accent); }
+  .wordmark-name { color: var(--text); margin: 0 2px; }
+
+  /* Desktop nav */
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .nav-links { display: flex; }
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    position: relative;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--accent-dim);
+  }
+
+  .nav-link--active {
+    color: var(--accent);
+  }
+
+  .nav-link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* Right side */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .btn-resume {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 0.375rem 0.875rem;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-resume:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+
+  @media (min-width: 768px) {
+    .btn-resume { display: flex; }
+  }
+
+  /* Hamburger */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .hamburger:hover { background: var(--accent-dim); }
+
+  @media (min-width: 768px) {
+    .hamburger { display: none; }
+  }
+
+  .bar {
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+
+  .hamburger.is-open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.is-open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.is-open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .mobile-menu.is-open {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem 1.5rem;
+    gap: 0.25rem;
+  }
+
+  .mobile-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.625rem 0.75rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .mobile-link:hover {
+    color: var(--text);
+    background: var(--accent-dim);
+  }
+
+  .mobile-link--active { color: var(--accent); }
+
+  .mobile-resume {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .mobile-resume:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+</style>

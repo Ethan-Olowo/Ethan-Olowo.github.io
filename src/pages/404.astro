@@ -1,0 +1,315 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — Module Not Found" description="This route does not exist.">
+  <section class="not-found" aria-labelledby="error-heading">
+    <div class="container not-found-inner">
+      <!-- Terminal window -->
+      <div class="terminal" role="region" aria-label="Terminal error output">
+        <!-- Window chrome -->
+        <div class="terminal-bar" aria-hidden="true">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">bash — 80×24</span>
+        </div>
+
+        <!-- Terminal body -->
+        <div class="terminal-body">
+          <p class="line">
+            <span class="prompt">~/portfolio</span>
+            <span class="cmd" id="typed-cmd"></span>
+            <span class="cursor" aria-hidden="true"></span>
+          </p>
+
+          <div class="output" id="error-output" aria-live="polite">
+            <p class="line-out error-code" id="heading-anchor">
+              <span class="err-label">ERROR</span>
+              <span id="error-heading" tabindex="-1">ModuleNotFound: Module Under Development</span>
+            </p>
+            <p class="line-out dim">  at Router.resolve (router.ts:247)</p>
+            <p class="line-out dim">  at App.navigate (app.ts:88)</p>
+            <p class="line-out dim">  at Window.onpopstate (history.ts:12)</p>
+            <br />
+            <p class="line-out">
+              <span class="key">exit code</span>
+              <span class="val">404</span>
+            </p>
+            <p class="line-out">
+              <span class="key">path    </span>
+              <span class="val path-value" id="current-path">…</span>
+            </p>
+            <p class="line-out">
+              <span class="key">suggest </span>
+              <span class="val accent">cd ~ && npm run navigate</span>
+            </p>
+          </div>
+
+          <!-- CTA -->
+          <div class="terminal-cta">
+            <a href="/" class="cta-terminal" aria-label="Return to home page">
+              <span class="prompt-inline">$</span>
+              cd ~ / Go Home
+            </a>
+            <a href="/projects" class="cta-ghost-term">
+              ls projects/
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large 404 in background -->
+      <div class="bg-code" aria-hidden="true">404</div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Show current path
+  const pathEl = document.getElementById('current-path');
+  if (pathEl) pathEl.textContent = window.location.pathname;
+
+  // Typing animation for terminal command
+  const cmdEl = document.getElementById('typed-cmd') as HTMLElement;
+  const text = 'navigate ' + window.location.pathname;
+  let i = 0;
+
+  const type = () => {
+    if (!cmdEl) return;
+    if (i <= text.length) {
+      cmdEl.textContent = text.slice(0, i);
+      i++;
+      setTimeout(type, i < 10 ? 60 : 30);
+    }
+  };
+
+  setTimeout(type, 500);
+</script>
+
+<style>
+  .not-found {
+    min-height: calc(100vh - 64px - 100px);
+    display: flex;
+    align-items: center;
+    padding-block: 4rem;
+  }
+
+  .not-found-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Background 404 */
+  .bg-code {
+    position: absolute;
+    font-size: clamp(8rem, 25vw, 18rem);
+    font-weight: 800;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    letter-spacing: -0.04em;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* Terminal */
+  .terminal {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 600px;
+    background: #0D1117;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,245,212,0.05);
+    font-family: var(--font-mono);
+  }
+
+  /* Title bar */
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.625rem 1rem;
+    background: #161B22;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dot-red    { background: #FF5F57; }
+  .dot-yellow { background: #FFBD2E; }
+  .dot-green  { background: #28CA42; }
+
+  .terminal-title {
+    font-size: 0.6875rem;
+    color: #4A5568;
+    margin-left: auto;
+    letter-spacing: 0.04em;
+  }
+
+  /* Body */
+  .terminal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prompt {
+    color: var(--accent);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .prompt::after {
+    content: ' $';
+    color: #4A5568;
+  }
+
+  .cmd {
+    color: var(--text);
+    font-size: 0.875rem;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background: var(--accent);
+    opacity: 0.85;
+    border-radius: 1px;
+    animation: blink-cursor 1s step-end infinite;
+    vertical-align: bottom;
+    margin-left: 1px;
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 0; }
+  }
+
+  /* Output */
+  .output {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .line-out {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .dim { color: #363D4A; }
+
+  .error-code {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: #FF6B6B;
+    margin-bottom: 0.25rem;
+  }
+
+  .err-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    background: rgba(255, 107, 107, 0.12);
+    border: 1px solid rgba(255,107,107,0.25);
+    color: #FF6B6B;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  .key {
+    color: #4A5568;
+    display: inline-block;
+    width: 8ch;
+  }
+
+  .val {
+    color: var(--text);
+    font-size: 0.8125rem;
+  }
+
+  .val.accent {
+    color: var(--accent);
+  }
+
+  .path-value {
+    color: #FF9D3D;
+  }
+
+  /* CTA */
+  .terminal-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .cta-terminal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.5rem 1.125rem;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+
+  .cta-terminal:hover {
+    box-shadow: 0 0 18px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+
+  .prompt-inline {
+    color: var(--bg);
+    opacity: 0.6;
+  }
+
+  .cta-ghost-term {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .cta-ghost-term:hover {
+    color: var(--accent);
+    border-color: rgba(0,245,212,0.3);
+  }
+</style>

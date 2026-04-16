@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProjectCardRenderer from '../../components/ProjectCardRenderer';
+import TagFilter from '../../components/TagFilter';
+
+// Fetch all non-draft projects, sorted by order field
+const allProjects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Serialize for client component (dates → strings, etc.)
+const projectItems = allProjects.map((p) => ({
+  slug: p.slug,
+  title: p.data.title,
+  description: p.data.description,
+  tags: p.data.tags,
+  githubUrl: p.data.githubUrl ?? '',
+  liveUrl: p.data.liveUrl ?? '',
+  featured: p.data.featured,
+  order: p.data.order,
+}));
+---
+
+<Layout
+  title="Projects — Your Name"
+  description="A collection of full-stack, machine learning, and computer vision projects."
+>
+  <section class="page-section">
+    <div class="container">
+
+      <!-- Page header -->
+      <header class="page-header fade-up delay-1">
+        <p class="page-label">Work</p>
+        <h1 class="page-title">Projects</h1>
+        <p class="page-sub">
+          Systems I've designed, built, and shipped — spanning full-stack web, computer vision,
+          ML pipelines, and applied AI tooling.
+          <!-- TODO: Update with your own summary -->
+        </p>
+      </header>
+
+      <!-- Filtered grid (React island) -->
+      <div class="fade-up delay-2">
+        <TagFilter
+          client:load
+          items={projectItems}
+          emptyMessage="No projects match that tag."
+        />
+      </div>
+
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-section {
+    padding-block: 4rem 6rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    max-width: 640px;
+  }
+
+  .page-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .page-sub {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+</style>
