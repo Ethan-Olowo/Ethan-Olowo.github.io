@@ -1,6 +1,6 @@
-# Developer Portfolio
+# Personal Portfolio
 
-Personal portfolio site built with **Astro**, **React**, **Tailwind CSS**, and **Framer Motion**.
+This is a personal portfolio site built with **Astro**, **React**, **Tailwind CSS**, and **Framer Motion**. It showcases projects, skills, and a blog section, serving as a central hub for professional and personal development highlights.
 
 ## Stack
 - **Framework**: Astro 4 (SSG, file-based routing)
@@ -30,30 +30,15 @@ npm run preview
 ```
 
 ---
+## Current State
 
-## Customisation Checklist
+The portfolio is structured to highlight key projects and skills. It includes:
+- A homepage with an introduction, featured projects, and a call-to-action.
+- A dedicated projects section with detailed pages for each project.
+- A blog section for sharing insights and experiences.
+- A responsive design with smooth animations and interactive elements.
 
-### Identity
-- [ ] `src/layouts/Layout.astro` — Update `title`, `description`, and `base` path
-- [ ] `src/components/Footer.astro` — Update social links + your name in copyright
-- [ ] `src/pages/index.astro` — Update bio, stats, tech strip, and CTA links
-
-### Projects
-- [ ] `src/pages/index.astro` — Replace `featuredProjects` array with your own projects
-- [ ] Create MDX files in `src/content/projects/` for full project pages
-
-### Blog
-- [ ] Create MDX files in `src/content/blog/` (frontmatter schema in `src/content/config.ts`)
-
-### Deployment (GitHub Pages)
-- [ ] `astro.config.mjs` — Set `site` to your GitHub Pages URL
-- [ ] `astro.config.mjs` — Set `base` to `/repo-name` if deploying to a subdirectory
-- [ ] In GitHub repo: Settings → Pages → Source → GitHub Actions
-
-### Assets
-- [ ] Add `public/resume.pdf`
-- [ ] Add `public/og-image.png` (1200×630)
-- [ ] Add `public/favicon.ico` or `public/favicon.svg`
+The site is fully functional and deployed on GitHub Pages. It is designed to be easily extendable, allowing for the addition of new projects, blog posts, and other content as needed.
 
 ---
 
@@ -79,4 +64,4 @@ src/
 
 ## Deployment
 
-Push to `main` — the GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and deploys automatically.
+The site is automatically deployed via GitHub Actions. Any changes pushed to the `main` branch trigger a build and deployment process, ensuring the live site is always up-to-date.
