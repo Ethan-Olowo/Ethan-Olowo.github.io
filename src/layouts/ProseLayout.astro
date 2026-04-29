@@ -194,17 +194,29 @@ const formattedDate = date
     tocNav.appendChild(ul);
 
     // Highlight active section on scroll
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+    const observerOptions = {
+      rootMargin: '-80px 0% -80% 0%', 
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
           const id = entry.target.id;
-          const link = tocNav.querySelector<HTMLAnchorElement>(`a[href="#${id}"]`);
-          if (!link) return;
-          link.classList.toggle('toc-link--active', entry.isIntersecting);
-        });
-      },
-      { rootMargin: '-20% 0% -70% 0%' }
-    );
+          
+          // 1. Remove active class from all links
+          tocNav.querySelectorAll('.toc-link').forEach((link) => {
+            link.classList.remove('toc-link--active');
+          });
+
+          // 2. Add active class to the one that just entered the trigger zone
+          const activeLink = tocNav.querySelector(`.toc-link[href="#${id}"]`);
+          if (activeLink) {
+            activeLink.classList.add('toc-link--active');
+          }
+        }
+      });
+    }, observerOptions);
 
     headings.forEach((h) => observer.observe(h));
   }
@@ -562,6 +574,45 @@ const formattedDate = date
   }
   .toc-link:hover { color: var(--text); }
   .toc-link--active {
+    color: var(--toc-active);
+    border-left-color: var(--toc-active);
+  }
+
+  .toc-wrap :global(.toc-list) {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0; 
+    margin: 0;
+  }
+
+  .toc-wrap :global(.toc-item) { 
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .toc-wrap :global(.toc-h3) { padding-left: 0.875rem; }
+
+  .toc-wrap :global(.toc-link) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    line-height: 1.5;
+    display: block;
+    padding: 0.2rem 0;
+    transition: color 0.15s;
+    border-left: 2px solid transparent;
+    margin-left: -1.25rem;
+    padding-left: 1rem;
+  }
+
+  .toc-wrap :global(.toc-link:hover) { 
+    color: var(--text); 
+  }
+
+  .toc-wrap :global(.toc-link--active) {
     color: var(--toc-active);
     border-left-color: var(--toc-active);
   }

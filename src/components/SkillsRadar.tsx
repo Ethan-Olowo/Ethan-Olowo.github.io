@@ -8,11 +8,11 @@ import {
 } from 'recharts';
 
 const data = [
-  { skill: 'Full-Stack', value: 90 },
-  { skill: 'Machine\nLearning', value: 85 },
-  { skill: 'Computer\nVision', value: 80 },
-  { skill: 'Data Eng.', value: 75 },
-  { skill: 'AI Systems', value: 78 },
+  { skill: 'Backend', value: 80 },
+  { skill: 'Machine\nLearning', value: 90 },
+  { skill: 'Frontend', value: 74 },
+  { skill: 'Data Eng.', value: 82 },
+  { skill: 'AI Systems', value: 80 },
   { skill: 'DevOps', value: 68 },
 ];
 
