@@ -9,15 +9,18 @@ interface Item {
 }
 
 import ProjectCardRenderer from "./ProjectCardRenderer";
+import BlogCardRenderer from "./BlogCardRenderer";
 
 interface TagFilterProps {
   items: Item[];
   emptyMessage?: string;
+  type?: "blog" | "project";
 }
 
 export default function TagFilter({
   items,
   emptyMessage = "No items found.",
+  type = "project",
 }: TagFilterProps) {
   const [active, setActive] = useState<string | null>(null);
 
@@ -141,10 +144,18 @@ export default function TagFilter({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}>
-                <ProjectCardRenderer
-                  item={item}
-                  index={i}
-                />
+                
+                {type === "blog" ? (
+                  <BlogCardRenderer
+                    item={item}
+                    index={i}
+                  />
+                ) : (
+                  <ProjectCardRenderer
+                    item={item}
+                    index={i}
+                  />
+                )}
               </motion.div>
             ))}
           </motion.div>

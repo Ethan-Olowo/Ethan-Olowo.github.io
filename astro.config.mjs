@@ -6,7 +6,7 @@ import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   site: 'https://ethan_olowo.github.io', 
-  base: '/',                               // TODO: Replace with /repo-name if needed
+  base: '/',                              
 
   output: 'static', // GitHub Pages requires static export
 
@@ -21,7 +21,7 @@ export default defineConfig({
   // Markdown config for blog posts
   markdown: {
     shikiConfig: {
-      theme: 'github-dark',
+      theme: 'solarized-light',
       wrap: true,
     },
   },
