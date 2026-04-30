@@ -284,7 +284,7 @@ export default function GlobalSearch() {
             borderRadius: '8px',
             textDecoration: 'none',
             background: isFocused ? 'var(--accent-dim)' : 'transparent',
-            border: `1px solid ${isFocused ? 'rgba(var(--accent-rgb,0,245,212),0.2)' : 'transparent'}`,
+            border: `1px solid ${isFocused ? 'var(--accent)' : 'transparent'}`,
             transition: 'background 0.12s, border-color 0.12s',
             cursor: 'pointer',
           }}
@@ -350,7 +350,7 @@ export default function GlobalSearch() {
                       fontSize: '0.625rem',
                       color: 'var(--accent)',
                       background: 'var(--accent-dim)',
-                      border: '1px solid rgba(var(--accent-rgb,0,245,212),0.15)',
+                      border: '1px solid var(--accent)',
                       padding: '0.1rem 0.4rem',
                       borderRadius: '3px',
                       letterSpacing: '0.03em',
