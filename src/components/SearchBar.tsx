@@ -262,7 +262,7 @@ export default function SearchBar({
             background: activeTag === null ? 'var(--accent-dim)' : 'transparent',
             color: activeTag === null ? 'var(--accent)' : 'var(--muted)',
             cursor: 'pointer',
-            transition: 'all 0.18s',
+            transition: 'all 0.2s',
           }}
         >
           All
@@ -279,11 +279,11 @@ export default function SearchBar({
               letterSpacing: '0.03em',
               padding: '0.28rem 0.75rem',
               borderRadius: '100px',
-              border: `1px solid ${activeTag === tag ? 'rgba(var(--accent-rgb, 0,245,212), 0.4)' : 'var(--border)'}`,
+              border: `1px solid ${activeTag === tag ? 'var(--accent)' : 'var(--border)'}`,
               background: activeTag === tag ? 'var(--accent-dim)' : 'transparent',
               color: activeTag === tag ? 'var(--accent)' : 'var(--muted)',
               cursor: 'pointer',
-              transition: 'all 0.18s',
+              transition: 'all 0.2s',
             }}
           >
             {tag}
