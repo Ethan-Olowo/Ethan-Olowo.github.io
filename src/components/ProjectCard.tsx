@@ -9,6 +9,8 @@ interface ProjectCardProps {
   /** Content collection slug — if provided, the card title links to the detail page */
   slug?: string;
   index?: number;
+  /** Pre-highlighted React node from fuzzy search */
+  highlightedTitle?: React.ReactNode;
 }
 
 const GitHubIcon = () => (
@@ -47,6 +49,7 @@ export default function ProjectCard({
   liveUrl,
   slug,
   index = 0,
+  highlightedTitle,
 }: ProjectCardProps) {
   // Handler to prevent card navigation when clicking external links
   const stopPropagation = (e: React.MouseEvent) => {
@@ -89,7 +92,22 @@ export default function ProjectCard({
             lineHeight: 1.3,
             letterSpacing: "-0.01em",
           }}>
-          {title}
+          {slug ? (
+            <a
+              href={`/projects/${slug}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color =
+                  "var(--accent)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "inherit";
+              }}>
+              {highlightedTitle ?? title}
+            </a>
+          ) : (
+            (highlightedTitle ?? title)
+          )}
         </h3>
 
         {/* Links */}
@@ -122,8 +140,7 @@ export default function ProjectCard({
                 a.style.color = "var(--muted)";
                 a.style.borderColor = "var(--border)";
                 a.style.background = "transparent";
-              }}
-              onClick={stopPropagation}>
+              }}>
               <GitHubIcon />
             </a>
           )}
@@ -155,8 +172,7 @@ export default function ProjectCard({
                 a.style.color = "var(--muted)";
                 a.style.borderColor = "var(--border)";
                 a.style.background = "transparent";
-              }}
-              onClick={stopPropagation}>
+              }}>
               <ExternalIcon />
             </a>
           )}
