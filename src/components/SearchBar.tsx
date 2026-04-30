@@ -219,8 +219,8 @@ export default function SearchBar({
               aria-label="Clear search"
               style={{
                 position: 'absolute',
-                right: '0.75rem',
-                top: '50%',
+                right: '0.6rem',
+                top: '25%',
                 transform: 'translateY(-50%)',
                 display: 'grid',
                 placeItems: 'center',
