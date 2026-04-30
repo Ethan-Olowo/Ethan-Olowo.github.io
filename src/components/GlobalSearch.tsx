@@ -418,9 +418,10 @@ export default function GlobalSearch() {
             style={{
               position: 'fixed',
               top: '80px',
-              left: '50%',
+              right: '10%',
               transform: 'translateX(-50%)',
               width: 'min(640px, calc(100vw - 2rem))',
+              maxWidth: '80%',
               maxHeight: 'calc(100vh - 120px)',
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
