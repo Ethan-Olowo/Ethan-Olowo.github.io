@@ -9,6 +9,8 @@ interface BlogCardProps {
   readingTime?: number;
   coverImage?: string;
   index?: number;
+  /** Pre-highlighted React node from fuzzy search */
+  highlightedTitle?: React.ReactNode;
 }
 
 function formatDate(date: Date): string {
@@ -27,6 +29,7 @@ export default function BlogCard({
   slug,
   readingTime,
   index = 0,
+  highlightedTitle,
 }: BlogCardProps) {
   return (
     <motion.article
@@ -111,7 +114,22 @@ export default function BlogCard({
               letterSpacing: '-0.01em',
             }}
           >
-            {title}
+            {slug ? (
+            <a
+              href={`/projects/${slug}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color =
+                  "var(--accent)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "inherit";
+              }}>
+              {highlightedTitle ?? title}
+            </a>
+          ) : (
+            (highlightedTitle ?? title)
+          )}
           </h2>
 
           {/* Description */}

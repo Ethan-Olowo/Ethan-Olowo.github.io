@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProjectCardRenderer from '../../components/ProjectCardRenderer';
-import TagFilter from '../../components/TagFilter';
+import SearchBar from '../../components/SearchBar';
 
 // Fetch all non-draft blogs, sorted by order field
 const allblogs = (await getCollection('blog', ({ data }) => !data.draft))
@@ -17,6 +17,12 @@ const blogItems = allblogs.map((p) => ({
   coverImage: p.data.coverImage ?? '',
   readingTime: p.data.readingTime ?? '',
   date: p.data.date,
+  excerpt:     p.body
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/[#*_`>[\]|]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 200),
 }));
 ---
 
@@ -39,10 +45,10 @@ const blogItems = allblogs.map((p) => ({
 
       <!-- Filtered grid (React island) -->
       <div class="fade-up delay-2">
-        <TagFilter
+        <SearchBar
           client:load
           items={blogItems}
-          emptyMessage="Nothing Here Yet, Check Back Soon!"
+          emptyMessage="No blogs found."
           type="blog"
         />
       </div>

@@ -1,4 +1,6 @@
 ---
+import GlobalSearch from './GlobalSearch';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
@@ -6,11 +8,11 @@ const navLinks = [
   { href: '/about', label: 'About' },
 ];
 
-// TODO: Replace with your resume URL
-const resumeUrl = '/resume.pdf';
-
 const currentPath = Astro.url.pathname;
 ---
+
+<!-- GlobalSearch island — mounts once, listens for open/close events -->
+<GlobalSearch client:load />
 
 <header class="navbar" id="navbar" role="banner">
   <div class="container nav-inner">
@@ -33,13 +35,30 @@ const currentPath = Astro.url.pathname;
         </a>
       ))}
     </nav>
- 
-    <!-- Theme toggle + hamburger -->
+
+    <!-- Right cluster: search · theme toggle · hamburger -->
     <div class="nav-right">
- 
-      <!-- ── Theme toggle ─────────────────────────────────── -->
+
+      <!-- ── Search button ──────────────────────────────────── -->
       <button
-        class="theme-toggle"
+        class="nav-icon-btn search-btn"
+        id="search-btn"
+        aria-label="Open site search (⌘/Ctrl+K)"
+        title="Search (⌘/Ctrl+K)"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+          stroke="currentColor" stroke-width="1.6"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6.5" cy="6.5" r="5"/>
+          <path d="M11 11l3.5 3.5"/>
+        </svg>
+        <!-- Desktop hint pill -->
+        <!-- <span class="search-hint" aria-hidden="true">⌘K</span> -->
+      </button>
+
+      <!-- ── Theme toggle ────────────────────────────────────── -->
+      <button
+        class="nav-icon-btn theme-toggle"
         id="theme-toggle"
         aria-label="Switch to light mode"
         title="Toggle colour theme"
@@ -58,7 +77,7 @@ const currentPath = Astro.url.pathname;
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
         </svg>
       </button>
- 
+
       <!-- ── Hamburger (mobile only) ────────────────────────── -->
       <button
         class="hamburger"
@@ -73,7 +92,7 @@ const currentPath = Astro.url.pathname;
       </button>
     </div>
   </div>
- 
+
   <!-- Mobile menu -->
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Mobile navigation">
     <nav class="mobile-nav">
@@ -86,19 +105,58 @@ const currentPath = Astro.url.pathname;
           {label}
         </a>
       ))}
+      <!-- Mobile search entry -->
+      <button class="mobile-search-btn" id="mobile-search-btn" aria-label="Open search">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"
+          stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6.5" cy="6.5" r="5"/>
+          <path d="M11 11l3.5 3.5"/>
+        </svg>
+        Search
+      </button>
     </nav>
   </div>
 </header>
- 
+
 <script>
+  // ── Search overlay ────────────────────────────────────────────
+  // GlobalSearch.tsx manages its own state via React props, but we need
+  // a lightweight bridge so the plain Astro navbar button can tell the
+  // React island to open. We use a custom DOM event on window.
+  const searchBtn       = document.getElementById('search-btn');
+  const mobileSearchBtn = document.getElementById('mobile-search-btn');
+
+  function openSearch() {
+    window.dispatchEvent(new CustomEvent('global-search-open'));
+  }
+
+  searchBtn?.addEventListener('click', openSearch);
+  mobileSearchBtn?.addEventListener('click', () => {
+    // Close mobile menu first
+    hamburger.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    hamburger.classList.remove('is-open');
+    mobileMenu.classList.remove('is-open');
+    openSearch();
+  });
+
+  // ⌘K / Ctrl+K — also handled inside GlobalSearch, but we mirror it
+  // here so the shortcut works even before the React island has mounted.
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
   // ── Theme toggle ──────────────────────────────────────────────
   const html   = document.documentElement;
   const toggle = document.getElementById('theme-toggle') as HTMLButtonElement;
- 
+
   function getTheme(): 'dark' | 'light' {
     return html.classList.contains('light') ? 'light' : 'dark';
   }
- 
+
   function applyTheme(theme: 'dark' | 'light') {
     html.classList.remove('dark', 'light');
     html.classList.add(theme);
@@ -110,23 +168,22 @@ const currentPath = Astro.url.pathname;
     const meta = document.getElementById('theme-color-meta');
     if (meta) meta.setAttribute('content', theme === 'light' ? '#f7efe9' : '#0B0F14');
   }
- 
+
   toggle?.addEventListener('click', () => {
     applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
   });
- 
-  // Sync aria-label with the theme the inline script already applied
+
   if (toggle) {
     toggle.setAttribute(
       'aria-label',
       getTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
     );
   }
- 
+
   // ── Mobile menu ───────────────────────────────────────────────
   const hamburger  = document.getElementById('hamburger')   as HTMLButtonElement;
   const mobileMenu = document.getElementById('mobile-menu') as HTMLElement;
- 
+
   hamburger?.addEventListener('click', () => {
     const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
     hamburger.setAttribute('aria-expanded', String(!isOpen));
@@ -134,7 +191,7 @@ const currentPath = Astro.url.pathname;
     hamburger.classList.toggle('is-open');
     mobileMenu.classList.toggle('is-open');
   });
- 
+
   mobileMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       hamburger.setAttribute('aria-expanded', 'false');
@@ -143,14 +200,14 @@ const currentPath = Astro.url.pathname;
       mobileMenu.classList.remove('is-open');
     });
   });
- 
+
   // ── Scroll shadow ─────────────────────────────────────────────
   const navbar = document.getElementById('navbar') as HTMLElement;
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 20);
   }, { passive: true });
 </script>
- 
+
 <style>
   /* ── Navbar shell ───────────────────────────────────────── */
   .navbar {
@@ -161,24 +218,21 @@ const currentPath = Astro.url.pathname;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid transparent;
-    transition:
-      border-color 0.3s ease,
-      background-color 0.35s ease;
+    transition: border-color 0.3s ease, background-color 0.35s ease;
   }
- 
-  /* Uses --navbar-scrolled so each theme gets its own tint */
+
   .navbar.scrolled {
     background: var(--navbar-scrolled);
     border-bottom-color: var(--border);
   }
- 
+
   .nav-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 64px;
   }
- 
+
   /* ── Wordmark ───────────────────────────────────────────── */
   .wordmark {
     font-family: var(--font-mono);
@@ -196,7 +250,7 @@ const currentPath = Astro.url.pathname;
   .wordmark:hover    { color: var(--accent); }
   .wordmark-bracket  { color: var(--accent); transition: color 0.35s; }
   .wordmark-name     { color: var(--text);   margin: 0 2px; transition: color 0.35s; }
- 
+
   /* ── Desktop nav ────────────────────────────────────────── */
   .nav-links {
     display: none;
@@ -204,7 +258,7 @@ const currentPath = Astro.url.pathname;
     gap: 0.25rem;
   }
   @media (min-width: 768px) { .nav-links { display: flex; } }
- 
+
   .nav-link {
     font-size: 0.875rem;
     font-weight: 500;
@@ -216,10 +270,7 @@ const currentPath = Astro.url.pathname;
     position: relative;
     transition: color 0.2s, background-color 0.2s;
   }
-  .nav-link:hover {
-    color: var(--text);
-    background: var(--accent-dim);
-  }
+  .nav-link:hover { color: var(--text); background: var(--accent-dim); }
   .nav-link--active { color: var(--accent); }
   .nav-link--active::after {
     content: '';
@@ -233,7 +284,7 @@ const currentPath = Astro.url.pathname;
     border-radius: 2px;
     transition: background-color 0.35s;
   }
- 
+
   /* ── Right cluster ──────────────────────────────────────── */
   .nav-right {
     display: flex;
@@ -241,47 +292,76 @@ const currentPath = Astro.url.pathname;
     gap: 0.375rem;
     flex-shrink: 0;
   }
- 
-  /* ── Theme toggle button ────────────────────────────────── */
-  .theme-toggle {
+
+  /* ── Shared icon button base ────────────────────────────── */
+  .nav-icon-btn {
     display: grid;
     place-items: center;
-    width: 36px;
     height: 36px;
     border-radius: 8px;
     border: 1px solid var(--border);
     background: transparent;
     color: var(--muted);
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition:
-      color 0.2s,
-      border-color 0.2s,
-      background-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
   }
-  .theme-toggle:hover {
+  .nav-icon-btn:hover {
     color: var(--accent);
     border-color: var(--accent);
     background: var(--accent-dim);
   }
- 
-  /*
-    Both icons occupy the same space.
-    The active one rotates in; the inactive one rotates out.
-    Controlled purely by the class on <html>.
-  */
+
+  /* ── Search button ──────────────────────────────────────── */
+  .search-btn {
+    /* Square on mobile, pill with hint on desktop */
+    width: 36px;
+    gap: 0.375rem;
+    padding: 0;
+  }
+
+  .search-hint {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    margin-right: 0.5rem;
+    transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 900px) {
+    .search-btn {
+      width: auto;
+      display: flex;
+      padding: 0 0.625rem;
+      gap: 0.375rem;
+    }
+    .search-hint { display: inline; }
+    .search-btn:hover .search-hint {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
+  /* ── Theme toggle ───────────────────────────────────────── */
+  .theme-toggle {
+    width: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
   .icon-moon,
   .icon-sun {
     position: absolute;
     transition: opacity 0.3s ease, transform 0.35s ease;
   }
- 
-  /* Dark mode: moon visible, sun hidden */
+
   html.dark  .icon-moon { opacity: 1; transform: rotate(0deg)   scale(1);   }
   html.dark  .icon-sun  { opacity: 0; transform: rotate(90deg)  scale(0.6); }
- 
-  /* Light mode: sun visible, moon hidden */
   html.light .icon-sun  { opacity: 1; transform: rotate(0deg)   scale(1);   }
   html.light .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.6); }
  
@@ -302,7 +382,7 @@ const currentPath = Astro.url.pathname;
   }
   .hamburger:hover { background: var(--accent-dim); }
   @media (min-width: 768px) { .hamburger { display: none; } }
- 
+
   .bar {
     display: block;
     width: 100%;
@@ -345,5 +425,25 @@ const currentPath = Astro.url.pathname;
     background: var(--accent-dim);
   }
   .mobile-link--active { color: var(--accent); }
+
+  .mobile-search-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.625rem 0.75rem;
+    border-radius: 6px;
+    width: 100%;
+    text-align: left;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.875rem;
+    transition: color 0.2s, background-color 0.2s;
+  }
+  .mobile-search-btn:hover { color: var(--accent); background: var(--accent-dim); }
 </style>
- 
