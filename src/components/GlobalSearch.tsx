@@ -75,8 +75,7 @@ function TypeIcon({ type }: { type: GroupKey }) {
   );
   if (type === 'project') return (
     <svg {...props}>
-      <rect x="2" y="2" width="12" height="12" rx="2"/>
-      <path d="M6 8h4M8 6v4"/>
+      <path d="M5.5 5 2.5 8 5.5 11 M10.5 5 13.5 8 10.5 11 M9 4 7 12" />
     </svg>
   );
   return (
