@@ -43,8 +43,8 @@ const currentPath = Astro.url.pathname;
       <button
         class="nav-icon-btn search-btn"
         id="search-btn"
-        aria-label="Open site search (⌘/Ctrl+K)"
-        title="Search (⌘/Ctrl+K)"
+        aria-label="Open site search (⌘/Ctrl+F)"
+        title="Search (⌘/Ctrl+F)"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
           stroke="currentColor" stroke-width="1.6"
@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname;
           <path d="M11 11l3.5 3.5"/>
         </svg>
         <!-- Desktop hint pill -->
-        <!-- <span class="search-hint" aria-hidden="true">⌘K</span> -->
+        <!-- <span class="search-hint" aria-hidden="true">⌘F</span> -->
       </button>
 
       <!-- ── Theme toggle ────────────────────────────────────── -->
@@ -140,10 +140,10 @@ const currentPath = Astro.url.pathname;
     openSearch();
   });
 
-  // ⌘K / Ctrl+K — also handled inside GlobalSearch, but we mirror it
+  // ⌘F / Ctrl+F — also handled inside GlobalSearch, but we mirror it
   // here so the shortcut works even before the React island has mounted.
   window.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
       e.preventDefault();
       openSearch();
     }

@@ -3,7 +3,7 @@
  *
  * Full-site search overlay. Triggered by:
  *   - Navbar search button  → dispatches 'global-search-open' on window
- *   - Keyboard shortcut ⌘K / Ctrl+K
+ *   - Keyboard shortcut ⌘F / Ctrl+F
  *   - Escape to dismiss
  *
  * The component manages its own open/close state internally and listens for
@@ -127,7 +127,7 @@ function HighlightedText({
 
 // ── Main component ─────────────────────────────────────────────────────────
 // Self-contained: manages its own isOpen state.
-// Opens via: custom 'global-search-open' DOM event OR ⌘K/Ctrl+K.
+// Opens via: custom 'global-search-open' DOM event OR ⌘F/Ctrl+F.
 // Closes via: Escape, backdrop click, result click, ESC kbd button.
 export default function GlobalSearch() {
   const [isOpen,  setIsOpen]  = useState(false);
@@ -185,7 +185,7 @@ export default function GlobalSearch() {
   // ── Keyboard shortcuts ─────────────────────────────────────────────────
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
         e.preventDefault();
         isOpen ? onClose() : onOpen();
       }
