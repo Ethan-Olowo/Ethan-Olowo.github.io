@@ -1,7 +1,7 @@
 ---
 title: "Revenue Prediction & Statistical Analysis Using Regression Modeling"
 description: "Performed comprehensive exploratory data analysis and multiple linear regression to model revenue drivers, identifying order volume and average order value as key predictors with strong statistical significance."
-tags: ["R", "Statistical Analysis", "Regression", "EDA", "Data Analysis"]
+tags: ["R", "Statistical Analysis", "Regression", "EDA", "Data Analysis", "Power BI"]
 
 coverImage: ""
 order: 13
@@ -11,18 +11,19 @@ draft: false
 
 ## Overview
 
-This project focuses on analyzing business transaction data to identify key drivers of revenue using statistical methods and regression modeling. It combines exploratory data analysis (EDA), hypothesis testing, and diagnostic evaluation to build and validate a predictive model for total revenue.
+This project analyzes business transaction data to identify key drivers of revenue using statistical and regression modeling. It addresses the problem of understanding revenue dynamics by combining exploratory data analysis, hypothesis testing, and predictive modeling.
 
-The analysis reveals strong relationships between revenue and operational variables, providing both academic insights and actionable business recommendations.
+## Problem Statement
+Businesses often struggle to pinpoint which operational variables most strongly influence revenue, limiting their ability to make data-driven decisions.
 
-## Features
-
+## Solution & Features
 - Comprehensive exploratory data analysis (EDA)  
 - Statistical summary metrics (mean, median, distribution, skewness, kurtosis)  
 - Correlation analysis between key variables  
 - Simple and multiple linear regression modeling  
 - Diagnostic testing of regression assumptions  
 - Interpretation of results for both academic and business contexts  
+- Creation of a Report and Dashboard using Power BI
 
 ## Tech Stack
 
@@ -32,6 +33,7 @@ The analysis reveals strong relationships between revenue and operational variab
 - lmtest (Durbin-Watson test)  
 - car (VIF analysis)  
 - gvlma (model validation)  
+- Power BI
 
 ## Data Analysis Workflow
 
@@ -61,6 +63,11 @@ The analysis reveals strong relationships between revenue and operational variab
 - Revenue growth is driven primarily by increasing order volume  
 - Upselling and bundling strategies can improve average order value  
 - Seasonal timing has minimal direct impact on revenue performance  
+
+## Power BI Dashboard
+- A Power BI dashboard was developed to effectively visualize and communicate the analytical findings from this project.
+
+![Dashboard Image](public/images/revenue_prediction_image.jpeg)
 
 ## Limitations
 

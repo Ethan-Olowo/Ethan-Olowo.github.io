@@ -1,6 +1,6 @@
 ---
 title: "DocuForge: Local-First Document Processing Engine"
-description: "Built a high-performance OCR-driven document management suite that converts scanned PDFs into searchable files using Tesseract and Ghostscript, with chunked processing for efficiency and complete local data privacy."
+description: "OCR-driven document management suite that converts scanned PDFs into searchable files using Tesseract and Ghostscript, with chunked processing for efficiency and complete local data privacy."
 tags: ["Python", "Tesseract OCR", "Ghostscript", "GUI"]
 githubUrl: "https://github.com/Ethan-Olowo/docuforge"
 coverImage: ""
@@ -11,7 +11,7 @@ draft: false
 
 ## Overview
 
-DocuForge is a high-performance, local-first document management suite designed to unlock "dark data" from static files. It focuses on industrial-grade OCR to transform scanned, non-selectable PDFs into searchable, usable documents, while ensuring complete data privacy by keeping all processing on-device.
+DocuForge is a high-performance, local-first document processing engine that transforms scanned PDFs into searchable files using OCR. The project solves the problem of extracting usable data from static, non-selectable documents while ensuring complete data privacy by keeping all processing on-device.
 
 The system integrates Tesseract OCR and Ghostscript, combining accuracy with robust file handling. Its chunked processing architecture allows efficient handling of large documents by optimizing memory and CPU usage.
 

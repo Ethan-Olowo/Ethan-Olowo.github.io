@@ -1,6 +1,6 @@
 ---
 title: "Secure Remote Communication System with AES Encryption"
-description: "Developed a secure messaging system using AES symmetric encryption with OTP-based key delivery via SMS simulation, enabling confidential communication between remote devices."
+description: "Secure messaging system using AES symmetric encryption with OTP-based key delivery via SMS simulation, enabling confidential communication between remote devices."
 tags: ["Python", "AES Encryption", "Flask", "PyQt6", "Networking"]
 githubUrl: "https://github.com/Ethan-Olowo/secure_remote_com"
 coverImage: ""
@@ -11,12 +11,12 @@ draft: false
 
 ## Overview
 
-This project is a secure remote communication system designed to enable confidential message exchange between two devices over a network. It uses AES symmetric encryption to protect message content and implements an OTP-based key transfer mechanism via SMS (simulated) to ensure secure decryption.
+This project is a secure remote communication system that enables confidential message exchange between devices over a network. It addresses the problem of secure, user-friendly communication by combining AES encryption, OTP-based key delivery, and a graphical interface.
 
-The system combines encryption, networking, and a graphical user interface to provide an end-to-end secure messaging workflow, including device discovery, message transmission, and controlled decryption.
+## Problem Statement
+Remote communication between devices is often vulnerable to interception and lacks user-friendly security mechanisms, putting confidential information at risk.
 
-## Features
-
+## Solution & Features
 - AES-based encryption and decryption for secure message handling  
 - OTP-based key delivery via simulated SMS for secure key exchange  
 - End-to-end automated workflow (encryption, transmission, decryption)  

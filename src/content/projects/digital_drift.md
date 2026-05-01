@@ -1,6 +1,6 @@
 ---
 title: "Digital Drift: Retro-Style Arcade Platformer"
-description: "Developed a fast-paced 2D arcade platformer in Unity featuring multiple gameplay mechanics, procedural systems, and a narrative-driven progression inspired by computer hardware restoration."
+description: "Fast-paced 2D arcade platformer in Unity featuring multiple gameplay mechanics, procedural systems, and a narrative-driven progression inspired by computer hardware restoration."
 tags: ["Unity", "C#", "Game Development", "2D Platformer", "Procedural Generation"]
 githubUrl: "https://github.com/kingzion24/digital-drift"
 liveUrl: "https://zion26.itch.io/digital-drift"
@@ -12,9 +12,7 @@ draft: false
 
 ## Overview
 
-Digital Drift is a fast-paced 2D arcade platformer set within a stylized digital world. Players control Hercules, a digital avatar navigating corrupted system environments inspired by computer hardware components. The game blends reflex-based gameplay with a narrative structure that simulates repairing a malfunctioning computer system.
-
-Built in Unity, the project demonstrates core game development concepts including physics-based mechanics, procedural systems, state management, and performance optimization, while maintaining a cohesive retro-digital aesthetic.
+Digital Drift is a retro-style 2D arcade platformer that immerses players in a digital world inspired by computer hardware restoration. The project addresses the challenge of creating engaging, reflex-based gameplay while integrating a narrative about repairing malfunctioning systems.
 
 ## Features
 

@@ -1,6 +1,6 @@
 ---
 title: "NLP-Powered Course Evaluation Analysis with Topic Modeling & Sentiment Classification"
-description: "Built an end-to-end NLP pipeline to extract topics and sentiments from student course evaluations, with an interactive Gradio interface deployed on Hugging Face for real-time predictions."
+description: "NLP pipeline to extract topics and sentiments from student course evaluations, with an interactive Gradio interface deployed on Hugging Face for real-time predictions."
 tags: ["Python", "NLP", "LDA", "Sentiment Analysis", "Gradio", "Hugging Face"]
 liveUrl: "https://huggingface.co/spaces/EthanOlowo/BI_NLP_Lab"
 coverImage: ""
@@ -11,12 +11,12 @@ draft: false
 
 ## Overview
 
-This project applies Natural Language Processing techniques to analyze student course evaluations and extract meaningful insights for decision-making. It combines topic modeling and sentiment analysis to identify key themes discussed by students and assess their associated sentiments.
+This project applies Natural Language Processing (NLP) to analyze student course evaluations, extracting actionable insights for educators and administrators. It solves the problem of manually sifting through large volumes of feedback by automating topic and sentiment analysis.
 
-An interactive web interface, deployed via Hugging Face Spaces using Gradio, allows users to input new evaluation text and receive real-time predictions for both topic classification and sentiment, making the solution accessible to non-technical stakeholders.
+## Problem Statement
+Educational institutions receive large volumes of unstructured course feedback, making it difficult to identify key themes and overall sentiment efficiently.
 
-## Features
-
+## Solution & Features
 - Topic modeling using Latent Dirichlet Allocation (LDA) to uncover key themes  
 - Sentiment classification (positive, negative, neutral) using machine learning models  
 - End-to-end NLP pipeline from preprocessing to prediction  

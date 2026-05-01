@@ -1,6 +1,6 @@
 ---
 title: "Diabetes Risk Prediction System with Explainable AI and MLOps Pipeline"
-description: "Developed a production-ready diabetes risk prediction system using an optimized MLP, enhanced with Explainable AI (SHAP, LIME), and deployed through a sustainable MLOps pipeline with monitoring and drift detection."
+description: "Diabetes risk prediction system using an optimized MLP, enhanced with Explainable AI (SHAP, LIME), and deployed through a sustainable MLOps pipeline with monitoring and drift detection."
 tags: ["Python", "Deep Learning", "MLOps", "Explainable AI", "FastAPI", "Optuna"]
 
 coverImage: ""
@@ -10,13 +10,12 @@ draft: false
 ---
 
 ## Overview
+This project delivers a production-ready machine learning system for predicting diabetes risk from health indicator data. It addresses the challenge of early and accurate diabetes detection by combining advanced neural network modeling, explainable AI, and robust MLOps practices.
 
-This project delivers an end-to-end machine learning system for predicting diabetes risk using health indicator data. It evolves from a baseline neural network into a production-grade solution by integrating advanced optimization techniques, Explainable AI (XAI), and a full MLOps pipeline.
+## Problem Statement
+Early detection of diabetes is critical for patient outcomes, but clinical settings require models that are both highly accurate and interpretable. Many existing solutions lack transparency or are not production-ready for real-world deployment.
 
-The system is designed around three core principles: high predictive performance, clinical interpretability, and sustainable deployment. It prioritizes patient safety by maximizing recall while ensuring transparency through model explainability techniques.
-
-## Features
-
+## Solution & Features
 - Binary classification model for diabetes risk prediction  
 - Optimized Multi-Layer Perceptron (MLP) using Bayesian tuning (Optuna)  
 - Explainable AI integration using SHAP (global) and LIME (local)  

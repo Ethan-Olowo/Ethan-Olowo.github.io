@@ -1,6 +1,6 @@
 ---
 title: "Playlisted: Web-Based Analytical Game"
-description: "Developed a data-driven web application using the Spotify API to process user playlist data for interactive gameplay. Designed a structured SQL database to manage user scores and song metadata."
+description: "Web-based analytical game that transforms Spotify playlist data into interactive gameplay"
 tags: ["Laravel", "PHP", "SQL", "Spotify API"]
 
 coverImage: ""
