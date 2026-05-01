@@ -8,12 +8,12 @@ import {
 } from 'recharts';
 
 const data = [
-  { skill: 'Backend', value: 80 },
-  { skill: 'Machine\nLearning', value: 90 },
-  { skill: 'Frontend', value: 74 },
-  { skill: 'Data Eng.', value: 82 },
-  { skill: 'AI Systems', value: 80 },
-  { skill: 'DevOps', value: 68 },
+  { skill: "Backend", value: 80 },
+  { skill: "AI & ML", value: 90 },
+  { skill: "Frontend", value: 76 },
+  { skill: "Data", value: 85 },
+  { skill: "DevOps", value: 68 },
+  { skill: "Database", value: 82 },
 ];
 
 // Custom angle axis tick for clean, mono-styled labels

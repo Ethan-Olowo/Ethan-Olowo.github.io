@@ -59,13 +59,6 @@ const featuredProjects = allProjects
           Resume
         </a>
       </div>
-
-      <!-- Tech strip -->
-      <div class="tech-strip fade-up delay-5" aria-label="Tech stack">
-        {['Python', 'Scikit-learn', 'FastAPI', 'Flutter', 'ReactJS', 'C#', 'Laravel', 'SQL', 'Docker', 'Git', 'AWS', 'Firebase', 'MongoDB'].map(tech => (
-          <span class="tech-pill">{tech}</span>
-        ))}
-      </div>
     </div>
 
     <!-- Grid decoration -->
@@ -92,23 +85,28 @@ const featuredProjects = allProjects
         <div class="skills-details">
           {[
             {
-              label: 'Data Science & AI',
+              label: 'Artificial Intelligence & Machine Learning',
               level: 90,
-              items: ['Python', 'Scikit-learn', 'R', 'Generative AI', 'Sentence Transformers', 'Model Versioning'],
+              items: ['Scikit-learn', 'Optuna', 'TensorFlow',  'PyTorch', 'Hugging Face'],
             },
             {
-              label: 'Data Engineering & BI',
+              label: 'Data Science & BI',
               level: 85,
-              items: ['SQL (SQL Server, MySQL, Supabase)', 'PowerBI', 'Firebase', 'MongoDB'],
+              items: ['Python', 'R', 'PowerBI', 'Tableau', 'Data Visualization', 'Statistical Analysis', 'ETL Pipelines'],
+            },
+            {
+              label: 'Database Systems',
+              level: 82,
+              items: ['SQL Server', 'MySQL', 'Supabase', 'MongoDB', 'Firebase'],
             },
             {
               label: 'Software Development',
-              level: 85,
-              items: ['Flutter', 'ReactJS', 'C#', 'Laravel', 'FastAPI', 'Flask'],
+              level: 78,
+              items: ['Flutter', 'ReactJS', 'C#', 'Laravel', 'FastAPI', 'Flask', 'C++'],
             },
             {
-              label: 'DevOps & Tools',
-              level: 80,
+              label: 'DevOps & Data Engineering',
+              level: 68,
               items: ['Docker', 'Git/GitHub', 'Linux Terminal', 'AWS'],
             },
           ].map(({ label, level, items }) => (
