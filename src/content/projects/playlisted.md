@@ -2,6 +2,7 @@
 title: "Playlisted: Web-Based Analytical Game"
 description: "Web-based analytical game that transforms Spotify playlist data into interactive gameplay"
 tags: ["Laravel", "PHP", "SQL", "Spotify API"]
+type: software
 
 coverImage: ""
 order: 99

@@ -2,6 +2,7 @@
 title: "NLP-Powered Course Evaluation Analysis with Topic Modeling & Sentiment Classification"
 description: "NLP pipeline to extract topics and sentiments from student course evaluations, with an interactive Gradio interface deployed on Hugging Face for real-time predictions."
 tags: ["Python", "NLP", "LDA", "Sentiment Analysis", "Gradio", "Hugging Face"]
+type: data-science
 liveUrl: "https://huggingface.co/spaces/EthanOlowo/BI_NLP_Lab"
 coverImage: ""
 order: 10

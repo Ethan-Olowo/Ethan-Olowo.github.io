@@ -2,6 +2,7 @@
 title: "Secure Remote Communication System with AES Encryption"
 description: "Secure messaging system using AES symmetric encryption with OTP-based key delivery via SMS simulation, enabling confidential communication between remote devices."
 tags: ["Python", "AES Encryption", "Flask", "PyQt6", "Networking"]
+type: software
 githubUrl: "https://github.com/Ethan-Olowo/secure_remote_com"
 coverImage: ""
 order: 4

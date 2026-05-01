@@ -2,6 +2,7 @@
 title: "OpenDosimeter (Strathmore University Branch)"
 description: "Directed a team to modernize radiation safety hardware, refactoring legacy code for maintainability and scalability. Enabled IoT capabilities via Bluetooth for real-time monitoring of healthcare worker safety data."
 tags: ["C++", "Arduino", "IoT", "Git"]
+type: software
 
 coverImage: ""
 order: 2

@@ -2,6 +2,7 @@
 title: "EduPath: AI-Powered Career Guidance Platform"
 description: "Career Guidance system to bridge the guidance gap for secondary students, using peer clustering, semantic interest matching, and real-time economic indicators, to transform decisions from guesswork into data-driven strategies."
 tags: ["Python", "XGBoost", "FastAPI", "Sentence Transformers", "OpenRouter API", "ReactJS", "Supabase", "Optuna"]
+type: data-science
 
 githubUrl: "https://github.com/Ethan-Olowo/Degree-Recommender-Backend"
 coverImage: ""

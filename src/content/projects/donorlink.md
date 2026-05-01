@@ -2,6 +2,7 @@
 title: "DonorLink: Transparency-Focused Donation Platform"
 description: "Secure donation platform integrating MPESA Daraja API for real-time payment validation and fraud prevention. Managed data persistence with Firebase for transparent, audit-ready records."
 tags: ["Flutter", "Firebase", "MPESA Daraja API"]
+type: software
 
 coverImage: ""
 order: 3

@@ -2,6 +2,7 @@
 title: "Revenue Prediction & Statistical Analysis Using Regression Modeling"
 description: "Performed comprehensive exploratory data analysis and multiple linear regression to model revenue drivers, identifying order volume and average order value as key predictors with strong statistical significance."
 tags: ["R", "Statistical Analysis", "Regression", "EDA", "Data Analysis", "Power BI"]
+type: data-science
 
 coverImage: ""
 order: 13

@@ -2,6 +2,7 @@
 title: "DocuForge: Local-First Document Processing Engine"
 description: "OCR-driven document management suite that converts scanned PDFs into searchable files using Tesseract and Ghostscript, with chunked processing for efficiency and complete local data privacy."
 tags: ["Python", "Tesseract OCR", "Ghostscript", "GUI"]
+type: software
 githubUrl: "https://github.com/Ethan-Olowo/docuforge"
 coverImage: ""
 order: 5

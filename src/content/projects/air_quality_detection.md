@@ -2,6 +2,7 @@
 title: "Smart Air: IoT-Based Air Quality Monitoring System"
 description: "Low-cost IoT system for real-time air quality monitoring using environmental sensors, and an interactive dashboard powered by Home Assistant and Grafana."
 tags: ["IoT", "Home Assistant", "Grafana", "Embedded Systems"]
+type: software
 
 coverImage: ""
 order: 11

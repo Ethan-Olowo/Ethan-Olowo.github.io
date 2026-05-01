@@ -2,6 +2,7 @@
 title: "Stock Price Forecasting & Analysis with Statistical and Deep Learning Models"
 description: "Time series forecasting pipeline combining statistical models (Holt-Winters, SARIMA) and LSTM neural networks to analyze and predict stock price trends."
 tags: ["Python", "Time Series", "SARIMA", "LSTM", "Pandas", "Matplotlib", "Power BI"]
+type: data-science
 
 coverImage: ""
 order: 7
