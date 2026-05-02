@@ -32,6 +32,7 @@ export interface SearchEntry {
 }
 
 type GroupKey = 'blog' | 'project' | 'page';
+type FilterType = 'all' | GroupKey;
 
 const GROUP_LABELS: Record<GroupKey, string> = {
   blog:    'Blog',
@@ -136,6 +137,8 @@ export default function GlobalSearch() {
   const [error,   setError]   = useState(false);
   const [results, setResults] = useState<Array<Fuse.FuseResult<SearchEntry>>>([]);
   const [cursor,  setCursor]  = useState(-1);
+  // Active filter tab: 'all', 'blog', 'project', or 'page'
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef  = useRef<HTMLUListElement>(null);
@@ -175,6 +178,7 @@ export default function GlobalSearch() {
       setQuery('');
       setResults([]);
       setCursor(-1);
+      setActiveFilter("all");
       requestAnimationFrame(() => inputRef.current?.focus());
       document.body.style.overflow = 'hidden';
     } else {
@@ -216,20 +220,61 @@ export default function GlobalSearch() {
     }
   }, [isOpen, query]);
 
-  // ── Flat result list for keyboard nav ─────────────────────────────────
-  const flatResults = useMemo(() => results.map(r => r.item), [results]);
+  // ── Filter and Normalization Logic ──────────────────────
 
-  // ── Keyboard navigation ────────────────────────────────────────────────
+  // 1. Filter raw results by the active tab
+  const filteredResults = useMemo(() => {
+    if (activeFilter === "all") return results;
+    return results.filter((r) => r.item.type === activeFilter);
+  }, [results, activeFilter]);
+
+  // 2. Normalize results into the visual order (Blog > Project > Page)
+  // This array is what keyboard navigation will actually traverse.
+  const visualResults = useMemo(() => {
+    const ordered: Array<{
+      result: Fuse.FuseResult<SearchEntry>;
+      visualIndex: number;
+    }> = [];
+    let counter = 0;
+
+    GROUP_ORDER.forEach((groupKey) => {
+      filteredResults.forEach((res) => {
+        if (res.item.type === groupKey) {
+          ordered.push({ result: res, visualIndex: counter++ });
+        }
+      });
+    });
+    return ordered;
+  }, [filteredResults]);
+
+  // 3. Re-group for rendering, using the visualIndex we calculated
+  const grouped = useMemo(() => {
+    const g: Partial<Record<GroupKey, typeof visualResults>> = {};
+    visualResults.forEach((item) => {
+      const key = item.result.item.type as GroupKey;
+      if (!g[key]) g[key] = [];
+      g[key]!.push(item);
+    });
+    return g;
+  }, [visualResults]);
+
+  // ── Improved Keyboard Navigation ────────────────────────────
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setCursor(c => Math.min(c + 1, flatResults.length - 1));
+      // Ensure we can't go past the end of the current filtered list
+      setCursor((c) => Math.min(c + 1, visualResults.length - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setCursor(c => Math.max(c - 1, -1));
+      // Restore Focus to Input: If at 0, go to -1
+      setCursor((c) => {
+        const next = c - 1;
+        if (next === -1) inputRef.current?.focus();
+        return Math.max(next, -1);
+      });
     } else if (e.key === 'Enter' && cursor >= 0) {
       e.preventDefault();
-      const target = flatResults[cursor];
+      const target = visualResults[cursor]?.result.item;
       if (target) {
         window.location.href = target.url;
         onClose();
@@ -237,37 +282,34 @@ export default function GlobalSearch() {
     }
   };
 
-  // Scroll focused item into view
+  // Stable scroll handling
   useEffect(() => {
-    if (cursor < 0 || !listRef.current) return;
-    const item = listRef.current.querySelectorAll('[data-result-item]')[cursor] as HTMLElement;
-    item?.scrollIntoView({ block: 'nearest' });
+    if (cursor < 0) {
+      // Fix: If cursor is -1 (input), ensure container stays at top
+      listRef.current?.parentElement?.scrollTo({ top: 0 });
+      return;
+    }
+    if (!listRef.current) return;
+
+    // Find item by visual index
+    const items = listRef.current.querySelectorAll("[data-result-item]");
+    const item = items[cursor] as HTMLElement;
+    item?.scrollIntoView({ block: "nearest" });
   }, [cursor]);
 
-  // ── Group results by type ──────────────────────────────────────────────
-  const grouped = useMemo(() => {
-    const g: Partial<Record<GroupKey, Array<{ result: Fuse.FuseResult<SearchEntry>; flatIndex: number }>>> = {};
-    results.forEach((result, flatIndex) => {
-      const key = result.item.type as GroupKey;
-      if (!g[key]) g[key] = [];
-      g[key]!.push({ result, flatIndex });
-    });
-    return g;
-  }, [results]);
-
-  const hasResults = results.length > 0;
+  const hasResults = visualResults.length > 0;
   const showEmpty  = !loading && !error && query.trim().length >= 2 && !hasResults;
 
   // ── Result item renderer ───────────────────────────────────────────────
   const ResultItem = ({
     result,
-    flatIndex,
+    visualIndex,
   }: {
     result: Fuse.FuseResult<SearchEntry>;
-    flatIndex: number;
+    visualIndex: number;
   }) => {
     const { item, matches } = result;
-    const isFocused = cursor === flatIndex;
+    const isFocused = cursor === visualIndex;
 
     return (
       <li data-result-item>
@@ -287,10 +329,7 @@ export default function GlobalSearch() {
             transition: 'background 0.12s, border-color 0.12s',
             cursor: 'pointer',
           }}
-          onMouseEnter={() => setCursor(flatIndex)}
-          onMouseLeave={() => setCursor(-1)}
-        >
-          {/* Type icon badge */}
+          onMouseEnter={() => setCursor(visualIndex)}>
           <span
             style={{
               display: 'grid',
@@ -361,20 +400,6 @@ export default function GlobalSearch() {
               </div>
             )}
           </div>
-
-          {/* Arrow */}
-          <svg
-            width="12" height="12" viewBox="0 0 12 12" fill="none"
-            aria-hidden="true"
-            style={{
-              flexShrink: 0,
-              marginTop: '6px',
-              color: isFocused ? 'var(--accent)' : 'var(--border)',
-              transition: 'color 0.12s',
-            }}
-          >
-            <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
         </a>
       </li>
     );
@@ -493,6 +518,42 @@ export default function GlobalSearch() {
               </kbd>
             </div>
 
+            {/* Filter Tabs UI */}
+            <div
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                padding: "0.5rem 1rem",
+                borderBottom: "1px solid var(--border)",
+                background: "var(--bg-card-alt)",
+              }}>
+              {(["all", ...GROUP_ORDER] as FilterType[]).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => {
+                    setActiveFilter(f);
+                    setCursor(-1);
+                  }}
+                  style={{
+                    padding: "0.3rem 0.6rem",
+                    borderRadius: "6px",
+                    fontSize: "0.75rem",
+                    cursor: "pointer",
+                    border: "1px solid",
+                    transition: "all 0.1s",
+                    borderColor:
+                      activeFilter === f ? "var(--accent)" : "transparent",
+                    background:
+                      activeFilter === f ? "var(--accent-dim)" : "transparent",
+                    color:
+                      activeFilter === f ? "var(--accent)" : "var(--muted)",
+                    textTransform: "capitalize",
+                  }}>
+                  {f}
+                </button>
+              ))}
+            </div>
+
             {/* Results area */}
             <div style={{ overflowY: 'auto', flex: 1 }}>
               {loading && (
@@ -515,7 +576,7 @@ export default function GlobalSearch() {
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.8rem',
                   color: '#f87171',
-                }}>
+                  }}>
                   Failed to load search index. Check your network connection.
                 </p>
               )}
@@ -528,7 +589,7 @@ export default function GlobalSearch() {
                   color: 'var(--muted)',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                }}>
+                  }}>
                   {query ? 'Keep typing…' : 'Browse all content'}
                 </p>
               )}
@@ -549,31 +610,32 @@ export default function GlobalSearch() {
                   aria-label="Search results"
                   style={{ listStyle: 'none', padding: '0.5rem' }}
                 >
-                  {GROUP_ORDER.map(groupKey => {
-                    const group = grouped[groupKey];
-                    if (!group?.length) return null;
+                  {GROUP_ORDER.map((groupKey) => {
+                    const groupItems = grouped[groupKey];
+                    if (!groupItems?.length) return null;
                     return (
                       <li key={groupKey}>
                         {/* Group header */}
                         <p style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.65rem',
-                          letterSpacing: '0.1em',
-                          textTransform: 'uppercase',
-                          color: 'var(--muted)',
-                          padding: '0.5rem 0.875rem 0.375rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.375rem',
-                        }}>
-                          <TypeIcon type={groupKey} />
-                          {GROUP_LABELS[groupKey]}
-                          <span style={{ color: 'var(--border)' }}>·</span>
-                          <span>{group.length}</span>
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.65rem',
+                            letterSpacing: '0.1em',
+                            textTransform: 'uppercase',
+                            color: 'var(--muted)',
+                            padding: '0.5rem 0.875rem 0.375rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                          }}>
+                          <TypeIcon type={groupKey} /> {GROUP_LABELS[groupKey]}
                         </p>
                         <ul style={{ listStyle: 'none' }}>
-                          {group.map(({ result, flatIndex }) => (
-                            <ResultItem key={result.item.id} result={result} flatIndex={flatIndex} />
+                          {groupItems.map(({ result, visualIndex }) => (
+                            <ResultItem
+                              key={result.item.id}
+                              result={result}
+                              visualIndex={visualIndex}
+                            />
                           ))}
                         </ul>
                       </li>
@@ -591,7 +653,7 @@ export default function GlobalSearch() {
               alignItems: 'center',
               gap: '1rem',
               flexWrap: 'wrap',
-            }}>
+              }}>
               {[
                 { key: '↑↓', desc: 'navigate' },
                 { key: '↵', desc: 'open' },
@@ -614,7 +676,7 @@ export default function GlobalSearch() {
                     borderRadius: '4px',
                     padding: '0.1rem 0.35rem',
                     fontSize: '0.65rem',
-                  }}>
+                    }}>
                     {key}
                   </kbd>
                   {desc}
