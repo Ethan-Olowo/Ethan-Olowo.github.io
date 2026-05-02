@@ -116,7 +116,7 @@ export default function BlogCard({
           >
             {slug ? (
             <a
-              href={`/projects/${slug}`}
+              href={`/blog/${slug}`}
               style={{ color: "inherit", textDecoration: "none" }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.color =
