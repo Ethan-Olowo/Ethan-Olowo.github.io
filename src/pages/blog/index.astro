@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import ProjectCardRenderer from '../../components/ProjectCardRenderer';
 import SearchBar from '../../components/SearchBar';
 
 // Fetch all non-draft blogs, sorted by order field
@@ -27,7 +26,7 @@ const blogItems = allblogs.map((p) => ({
 ---
 
 <Layout
-  title="blogs — Your Name"
+  title="blogs — Ethan Olowo"
   description="A collection of blogs about my projects and learnings."
 >
   <section class="page-section">

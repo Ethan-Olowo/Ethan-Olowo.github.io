@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import ProjectCardRenderer from '../../components/ProjectCardRenderer';
 import SearchBar from '../../components/SearchBar';
 
 // Fetch all non-draft projects, sorted by order field
@@ -28,7 +27,7 @@ const projectItems = allProjects.map((p) => ({
 ---
 
 <Layout
-  title="Projects — Your Name"
+  title="Projects — Ethan Olowo"
   description="A collection of full-stack, machine learning, and computer vision projects."
 >
   <section class="page-section">
