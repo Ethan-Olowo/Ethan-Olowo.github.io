@@ -86,7 +86,7 @@ const featuredProjects = allProjects
           {[
             {
               label: 'Artificial Intelligence & Machine Learning',
-              level: 90,
+              level: 87,
               items: ['Scikit-learn', 'Optuna', 'TensorFlow',  'PyTorch', 'Hugging Face'],
             },
             {
@@ -96,12 +96,12 @@ const featuredProjects = allProjects
             },
             {
               label: 'Database Systems',
-              level: 82,
+              level: 81,
               items: ['SQL Server', 'MySQL', 'Supabase', 'MongoDB', 'Firebase'],
             },
             {
               label: 'Software Development',
-              level: 78,
+              level: 82,
               items: ['Flutter', 'ReactJS', 'C#', 'Laravel', 'FastAPI', 'Flask', 'C++'],
             },
             {
@@ -109,7 +109,7 @@ const featuredProjects = allProjects
               level: 68,
               items: ['Docker', 'Git/GitHub', 'Linux Terminal', 'AWS'],
             },
-          ].map(({ label, level, items }) => (
+          ].sort((a, b) => b.level - a.level).map(({ label, level, items }) => (
             <article class="skill-card">
               <div class="skill-card-header">
                 <span class="skill-label">{label}</span>
