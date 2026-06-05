@@ -17,13 +17,13 @@
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import Fuse from 'fuse.js';
+import Fuse, { type IFuseOptions, type FuseResultMatch, type FuseResult } from 'fuse.js';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export interface SearchEntry {
   id: string;
-  type: 'blog' | 'project' | 'page';
+  type: 'blog' | 'project' | 'page' | 'certification';
   title: string;
   description: string;
   tags: string[];
@@ -32,19 +32,20 @@ export interface SearchEntry {
   url: string;
 }
 
-type GroupKey = 'blog' | 'project' | 'page';
+type GroupKey = 'blog' | 'project' | 'page' | 'certification';
 type FilterType = 'all' | GroupKey;
 
 const GROUP_LABELS: Record<GroupKey, string> = {
-  blog:    'Blog',
-  project: 'Projects',
-  page:    'Pages',
+  blog:          'Blog',
+  project:       'Projects',
+  certification: 'Certifications',
+  page:          'Pages',
 };
 
-const GROUP_ORDER: GroupKey[] = ['blog', 'project', 'page'];
+const GROUP_ORDER: GroupKey[] = ['blog', 'project', 'certification', 'page'];
 
 // ── Fuse config ────────────────────────────────────────────────────────────
-const FUSE_OPTIONS: Fuse.IFuseOptions<SearchEntry> = {
+const FUSE_OPTIONS: IFuseOptions<SearchEntry> = {
   keys: [
     { name: 'title',        weight: 0.45 },
     { name: 'languages',    weight: 0.15 },
@@ -83,6 +84,12 @@ function TypeIcon({ type }: { type: GroupKey }) {
       <path d="M5.5 5 2.5 8 5.5 11 M10.5 5 13.5 8 10.5 11 M9 4 7 12" />
     </svg>
   );
+  if (type === 'certification') return (
+    <svg {...props}>
+      <circle cx="8" cy="6" r="3.5" />
+      <path d="M6.5 9.2 5.5 14l2.5-1.7L10.5 14l-1-4.8" />
+    </svg>
+  );
   return (
     <svg {...props}>
       <path d="M8 2l1.5 3 3.5.5-2.5 2.5.5 3.5L8 10l-3 1.5.5-3.5L3 5.5l3.5-.5z"/>
@@ -97,7 +104,7 @@ function HighlightedText({
   field,
 }: {
   text: string;
-  matches: readonly Fuse.FuseResultMatch[] | undefined;
+  matches: readonly FuseResultMatch[] | undefined;
   field: string;
 }) {
   if (!matches) return <>{text}</>;
@@ -139,7 +146,7 @@ export default function GlobalSearch() {
   const [query,   setQuery]   = useState('');
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState(false);
-  const [results, setResults] = useState<Array<Fuse.FuseResult<SearchEntry>>>([]);
+  const [results, setResults] = useState<Array<FuseResult<SearchEntry>>>([]);
   const [cursor,  setCursor]  = useState(-1);
   // Active filter tab: 'all', 'blog', 'project', or 'page'
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
@@ -236,7 +243,7 @@ export default function GlobalSearch() {
   // This array is what keyboard navigation will actually traverse.
   const visualResults = useMemo(() => {
     const ordered: Array<{
-      result: Fuse.FuseResult<SearchEntry>;
+      result: FuseResult<SearchEntry>;
       visualIndex: number;
     }> = [];
     let counter = 0;
@@ -309,7 +316,7 @@ export default function GlobalSearch() {
     result,
     visualIndex,
   }: {
-    result: Fuse.FuseResult<SearchEntry>;
+    result: FuseResult<SearchEntry>;
     visualIndex: number;
   }) => {
     const { item, matches } = result;
@@ -384,7 +391,7 @@ export default function GlobalSearch() {
             {/* Tags & Tech */}
             {(item.tags.length > 0 || (item.technologies && item.technologies.length > 0)) && (
               <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
-                {item.tags.slice(0, 3).map(tag => (
+                {item.tags.slice(0, 3).map((tag: string) => (
                   <span
                     key={tag}
                     style={{
@@ -402,7 +409,7 @@ export default function GlobalSearch() {
                     {tag}
                   </span>
                 ))}
-                {item.technologies?.slice(0, 3).map(tech => (
+                {item.technologies?.slice(0, 3).map((tech: string) => (
                   <span
                     key={tech}
                     style={{

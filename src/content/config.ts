@@ -78,4 +78,23 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects };
+/**
+ * Certifications collection
+ * Usage: create MD files in src/content/certifications/
+ */
+const certifications = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    issuer: z.string(),
+    dateCompleted: z.coerce.date(),
+    badgeImage: z.string().optional(),
+    credentialUrl: z.string().url().optional(),
+    tags: z.array(z.string()).default([]),
+    tools: z.array(z.string()).default([]),
+    languages: z.array(z.string()).default([]),
+    frameworks: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, projects, certifications };
