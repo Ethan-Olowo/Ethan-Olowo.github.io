@@ -4,6 +4,9 @@ interface ProjectCardProps {
   title: string;
   description: string;
   tags: string[];
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
   githubUrl?: string;
   liveUrl?: string;
   /** Content collection slug — if provided, the card title links to the detail page */
@@ -45,6 +48,9 @@ export default function ProjectCard({
   title,
   description,
   tags,
+  languages = [],
+  frameworks = [],
+  tools = [],
   githubUrl,
   liveUrl,
   slug,
@@ -55,6 +61,9 @@ export default function ProjectCard({
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
+
+  // Combine all tech items for display
+  const combinedTech = Array.from(new Set([...languages, ...frameworks, ...tools]));
 
   const cardContent = (
     <>
@@ -190,29 +199,58 @@ export default function ProjectCard({
         {description}
       </p>
 
-      {/* Tags */}
-      <div
-        style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem" }}
-        role="list"
-        aria-label="Technologies used">
-        {tags.map((tag) => (
-          <span
-            key={tag}
-            role="listitem"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.6875rem",
-              fontWeight: 400,
-              color: "var(--accent)",
-              background: "var(--accent-dim)",
-              border: "1px solid var(--accent-glow)",
-              padding: "0.2rem 0.5rem",
-              borderRadius: "4px",
-              letterSpacing: "0.03em",
-            }}>
-            {tag}
-          </span>
-        ))}
+      {/* Tags & Tech */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        {/* Concept Tags */}
+        <div
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem" }}
+          role="list"
+          aria-label="Project domains">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              role="listitem"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.625rem",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                color: "var(--muted)",
+                background: "var(--bg)",
+                border: "1px solid var(--border)",
+                padding: "0.15rem 0.45rem",
+                borderRadius: "4px",
+              }}>
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Technologies */}
+        <div
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem" }}
+          role="list"
+          aria-label="Technologies used">
+          {combinedTech.map((tech) => (
+            <span
+              key={tech}
+              role="listitem"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.6875rem",
+                fontWeight: 400,
+                color: "var(--accent)",
+                background: "var(--accent-dim)",
+                border: "1px solid var(--accent-glow)",
+                padding: "0.2rem 0.5rem",
+                borderRadius: "4px",
+                letterSpacing: "0.03em",
+              }}>
+              {tech}
+            </span>
+          ))}
+        </div>
       </div>
     </>
   );

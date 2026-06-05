@@ -27,6 +27,7 @@ export interface SearchEntry {
   title: string;
   description: string;
   tags: string[];
+  technologies?: string[];
   excerpt: string;
   url: string;
 }
@@ -45,10 +46,13 @@ const GROUP_ORDER: GroupKey[] = ['blog', 'project', 'page'];
 // ── Fuse config ────────────────────────────────────────────────────────────
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchEntry> = {
   keys: [
-    { name: 'title',       weight: 0.50 },
-    { name: 'tags',        weight: 0.25 },
-    { name: 'description', weight: 0.15 },
-    { name: 'excerpt',     weight: 0.10 },
+    { name: 'title',        weight: 0.45 },
+    { name: 'languages',    weight: 0.15 },
+    { name: 'frameworks',   weight: 0.10 },
+    { name: 'tools',        weight: 0.05 },
+    { name: 'tags',         weight: 0.15 },
+    { name: 'description',  weight: 0.05 },
+    { name: 'excerpt',      weight: 0.05 },
   ],
   threshold:         0.35,
   includeScore:      true,
@@ -377,12 +381,30 @@ export default function GlobalSearch() {
             >
               <HighlightedText text={item.description} matches={matches} field="description" />
             </p>
-            {/* Tags */}
-            {item.tags.length > 0 && (
+            {/* Tags & Tech */}
+            {(item.tags.length > 0 || (item.technologies && item.technologies.length > 0)) && (
               <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
-                {item.tags.slice(0, 4).map(tag => (
+                {item.tags.slice(0, 3).map(tag => (
                   <span
                     key={tag}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.625rem',
+                      color: 'var(--muted)',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      padding: '0.1rem 0.4rem',
+                      borderRadius: '3px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {item.technologies?.slice(0, 3).map(tech => (
+                  <span
+                    key={tech}
                     style={{
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.625rem',
@@ -394,7 +416,7 @@ export default function GlobalSearch() {
                       letterSpacing: '0.03em',
                     }}
                   >
-                    {tag}
+                    {tech}
                   </span>
                 ))}
               </div>

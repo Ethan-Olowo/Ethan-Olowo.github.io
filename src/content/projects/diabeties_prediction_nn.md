@@ -1,7 +1,10 @@
 ---
 title: "Diabetes Risk Prediction System with Explainable AI and MLOps Pipeline"
 description: "Diabetes risk prediction system using an optimized MLP, enhanced with Explainable AI (SHAP, LIME), and deployed through a sustainable MLOps pipeline with monitoring and drift detection."
-tags: ["Python", "Deep Learning", "MLOps", "Explainable AI", "FastAPI", "Optuna"]
+tags: ["Deep Learning", "MLOps", "Explainable AI"]
+tools: ["Optuna"]
+languages: ["Python"]
+frameworks: ["PyTorch", "Scikit-learn", "FastAPI", "SHAP", "LIME"]
 
 coverImage: ""
 order: 12

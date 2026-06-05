@@ -1,7 +1,10 @@
 ---
 title: "Digital Drift: Retro-Style Arcade Platformer"
 description: "Fast-paced 2D arcade platformer in Unity featuring multiple gameplay mechanics, procedural systems, and a narrative-driven progression inspired by computer hardware restoration."
-tags: ["Unity", "C#", "Game Development", "2D Platformer", "Procedural Generation"]
+tags: ["Game Development"]
+tools: []
+languages: ["C#"]
+frameworks: ["Unity"]
 githubUrl: "https://github.com/kingzion24/digital-drift"
 liveUrl: "https://zion26.itch.io/digital-drift"
 coverImage: ""
