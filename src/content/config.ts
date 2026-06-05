@@ -47,6 +47,15 @@ const projects = defineCollection({
     /** Tech stack tags */
     tags: z.array(z.string()).default([]),
 
+    /** Tools used in project */
+    tools: z.array(z.string()).default([]),
+
+    /** Languages used in project */
+    languages: z.array(z.string()).default([]),
+
+    /** Frameworks and libraries used in project */
+    frameworks: z.array(z.string()).default([]),
+
     /** Link to GitHub repository */
     githubUrl: z.string().url().optional(),
 

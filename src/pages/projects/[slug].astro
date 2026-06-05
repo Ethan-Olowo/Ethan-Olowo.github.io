@@ -45,6 +45,9 @@ const nextProject = currentIndex < allProjects.length - 1 ? allProjects[currentI
     kind="project"
     backHref="/projects"
     backLabel="All Projects"
+    languages={data.languages}
+    frameworks={data.frameworks}
+    tools={data.tools}
   >
     <Content />
   </ProseLayout>

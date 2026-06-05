@@ -13,12 +13,14 @@ const projectItems = allProjects.map((p) => ({
   title:       p.data.title,
   description: p.data.description,
   tags:        p.data.tags,
+  languages:   p.data.languages,
+  frameworks:  p.data.frameworks,
+  tools:       p.data.tools,
   githubUrl:   p.data.githubUrl ?? '',
   liveUrl:     p.data.liveUrl   ?? '',
   featured:    p.data.featured,
   order:       p.data.order,
   excerpt:     p.body
-    .replace(/```[\s\S]*?```/g, '')
     .replace(/[#*_`>[\]|]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
