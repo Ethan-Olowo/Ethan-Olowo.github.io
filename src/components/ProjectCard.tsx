@@ -14,7 +14,48 @@ interface ProjectCardProps {
   index?: number;
   /** Pre-highlighted React node from fuzzy search */
   highlightedTitle?: React.ReactNode;
+  type?: ('software' | 'data-science' | 'ai-ml' | 'other')[];
+  coverImage?: string;
 }
+
+const SoftwareIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="16 18 22 12 16 6"></polyline>
+    <polyline points="8 6 2 12 8 18"></polyline>
+  </svg>
+);
+
+const DataScienceIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"></line>
+    <line x1="12" y1="20" x2="12" y2="4"></line>
+    <line x1="6" y1="20" x2="6" y2="14"></line>
+  </svg>
+);
+
+const OtherIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+  </svg>
+);
+
+const AiMlIcon = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+    <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5z"></path>
+    <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"></path>
+  </svg>
+);
+
+
 
 const GitHubIcon = () => (
   <svg
@@ -56,14 +97,21 @@ export default function ProjectCard({
   slug,
   index = 0,
   highlightedTitle,
-}: ProjectCardProps) {
-  // Handler to prevent card navigation when clicking external links
-  const stopPropagation = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
+  type,
+  coverImage,
+  }: ProjectCardProps) {
   // Combine all tech items for display
   const combinedTech = Array.from(new Set([...languages, ...frameworks, ...tools]));
+
+  const getTypeIcon = (t: string) => {
+    switch (t) {
+      case 'software': return <SoftwareIcon />;
+      case 'data-science': return <DataScienceIcon />;
+      case 'ai-ml': return <AiMlIcon />;
+      case 'other': return <OtherIcon />;
+      default: return null;
+    }
+  };
 
   const cardContent = (
     <>
@@ -92,32 +140,41 @@ export default function ProjectCard({
           alignItems: "flex-start",
           gap: "0.5rem",
         }}>
-        <h3
-          style={{
-            fontFamily: "var(--font-ui)",
-            fontSize: "1.0625rem",
-            fontWeight: 700,
-            color: "var(--text)",
-            lineHeight: 1.3,
-            letterSpacing: "-0.01em",
-          }}>
-          {slug ? (
-            <a
-              href={`/projects/${slug}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.color =
-                  "var(--accent)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.color = "inherit";
-              }}>
-              {highlightedTitle ?? title}
-            </a>
-          ) : (
-            (highlightedTitle ?? title)
-          )}
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '0.375rem', color: 'var(--accent)', opacity: 0.8, flexShrink: 0 }}>
+            {type?.map((t) => (
+              <div key={t} title={t.replace('-', ' ').toUpperCase()}>
+                {getTypeIcon(t)}
+              </div>
+            ))}
+          </div>
+          <h3
+            style={{
+              fontFamily: "var(--font-ui)",
+              fontSize: "1.0625rem",
+              fontWeight: 700,
+              color: "var(--text)",
+              lineHeight: 1.3,
+              letterSpacing: "-0.01em",
+            }}>
+            {slug ? (
+              <a
+                href={`/projects/${slug}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color =
+                    "var(--accent)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "inherit";
+                }}>
+                {highlightedTitle ?? title}
+              </a>
+            ) : (
+              (highlightedTitle ?? title)
+            )}
+          </h3>
+        </div>
 
         {/* Links */}
         <div style={{ display: "flex", gap: "0.25rem", flexShrink: 0 }}>
@@ -277,10 +334,10 @@ export default function ProjectCard({
       flexDirection: "column",
       gap: "1rem",
       cursor: slug ? "pointer" : "default",
-      position: "relative",
+      position: "relative" as const,
       overflow: "hidden",
       transition: "border-color 0.25s, box-shadow 0.25s",
-    },
+    } as any,
     onHoverStart: (e: any) => {
       const el = e.target as HTMLElement;
       const card = el.closest("article") as HTMLElement;

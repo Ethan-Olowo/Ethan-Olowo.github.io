@@ -5,7 +5,7 @@ tags: ["Career Guidance", "Recommendation Engine", "AI/ML"]
 tools: ["Supabase", "PostgreSQL", "OpenRouter"]
 languages: ["Python", "JavaScript", "SQL"]
 frameworks: ["FastAPI", "ReactJS", "Sentence Transformers"]
-type: software
+type: ['software', 'ai-ml']
 
 githubUrl: "https://github.com/Ethan-Olowo/Degree-Recommender-Backend"
 coverImage: ""

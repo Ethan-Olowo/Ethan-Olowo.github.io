@@ -5,7 +5,7 @@ tags: ["Fintech", "Fraud Detection", "Data Analysis"]
 tools: []
 languages: ["Python"]
 frameworks: ["Scikit-learn", "Pandas", "Matplotlib"]
-type: data-science
+type: ['data-science', 'ai-ml']
 
 githubUrl: "https://github.com/Eeshan-Vaghjiani/pesalink"
 coverImage: ""

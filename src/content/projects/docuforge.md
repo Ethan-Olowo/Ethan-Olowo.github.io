@@ -5,7 +5,7 @@ tags: ["Document Processing", "Local-First"]
 tools: ["Tesseract OCR", "Ghostscript"]
 languages: ["Python"]
 frameworks: []
-type: software
+type: ['software']
 githubUrl: "https://github.com/Ethan-Olowo/docuforge"
 coverImage: ""
 order: 5

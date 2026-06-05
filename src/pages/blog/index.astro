@@ -3,9 +3,9 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import SearchBar from '../../components/SearchBar';
 
-// Fetch all non-draft blogs, sorted by order field
+// Fetch all non-draft blogs, sorted by date descending
 const allblogs = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order);
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 // Serialize for client component (dates → strings, etc.)
 const blogItems = allblogs.map((p) => ({
@@ -14,7 +14,7 @@ const blogItems = allblogs.map((p) => ({
   description: p.data.description,
   tags: p.data.tags,
   coverImage: p.data.coverImage ?? '',
-  readingTime: p.data.readingTime ?? '',
+  readingTime: p.data.readingTime ?? null,
   date: p.data.date,
   excerpt:     p.body
     .replace(/```[\s\S]*?```/g, '')
@@ -37,8 +37,7 @@ const blogItems = allblogs.map((p) => ({
         <p class="page-label">Work</p>
         <h1 class="page-title">Blogs</h1>
         <p class="page-sub">
-          Thoughts on building intelligent systems, engineering trade-offs,
-          research notes, and occasional deep-dives.
+          Thoughts, research notes, and occasional deep-dives into projects and learnings.
         </p>
       </header>
 

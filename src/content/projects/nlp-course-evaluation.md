@@ -5,7 +5,7 @@ tags: ["NLP", "Sentiment Analysis", "Topic Modeling"]
 tools: ["Hugging Face"]
 languages: ["Python"]
 frameworks: ["Scikit-learn", "Gradio"]
-type: data-science
+type: ['data-science', 'ai-ml']
 liveUrl: "https://huggingface.co/spaces/EthanOlowo/BI_NLP_Lab"
 coverImage: ""
 order: 10

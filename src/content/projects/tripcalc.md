@@ -5,7 +5,7 @@ tags: ["Utility", "Logistics"]
 tools: ["OpenRouteService API", "Openpyxl", "Requests"]
 languages: ["Python"]
 frameworks: ["PySide6"]
-type: software
+type: ['software']
 githubUrl: "https://github.com/Ethan-Olowo/TripCalculator"
 coverImage: ""
 order: 6

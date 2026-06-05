@@ -5,7 +5,7 @@ tags: ["Machine Learning", "REST API", "MLOps"]
 tools: ["Docker", "NGINX", "Gunicorn"]
 languages: ["Python"]
 frameworks: ["Flask", "Scikit-learn"]
-type: software
+type: ['software', 'ai-ml']
 
 coverImage: ""
 order: 9

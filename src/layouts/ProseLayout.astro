@@ -14,7 +14,10 @@ interface Props {
   githubUrl?: string;
   liveUrl?: string;
   coverImage?: string;
-  kind: 'blog' | 'project';
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
+  kind: 'blog' | 'project' | 'profile' | 'other';
   backHref: string;
   backLabel: string;
 }
