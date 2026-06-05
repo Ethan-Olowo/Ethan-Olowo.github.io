@@ -5,7 +5,7 @@ tags: ["Deep Learning", "MLOps", "Explainable AI"]
 tools: ["Optuna"]
 languages: ["Python"]
 frameworks: ["PyTorch", "Scikit-learn", "FastAPI", "SHAP", "LIME"]
-type: data-science
+type: ['data-science', 'ai-ml']
 
 coverImage: ""
 order: 12

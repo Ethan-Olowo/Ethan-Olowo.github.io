@@ -5,7 +5,7 @@ tags: ["Regression", "Data Analysis"]
 tools: ["Power BI"]
 languages: ["R"]
 frameworks: []
-type: data-science
+type: ['data-science', 'ai-ml']
 
 coverImage: ""
 order: 13

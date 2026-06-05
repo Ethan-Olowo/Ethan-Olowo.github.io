@@ -5,7 +5,7 @@ tags: ["Game Development"]
 tools: ["Spotify API"]
 languages: ["PHP", "SQL"]
 frameworks: ["Laravel"]
-type: software
+type: ['software']
 
 coverImage: ""
 order: 99

@@ -74,7 +74,7 @@ const projects = defineCollection({
     /** Whether to show in project listings */
     draft: z.boolean().default(false),
 
-    type: z.enum(['software', 'data-science', 'other']).default('software'),
+    type: z.array(z.enum(['software', 'data-science', 'ai-ml', 'other'])).default(['software']),
   }),
 });
 

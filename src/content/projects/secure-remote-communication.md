@@ -5,7 +5,7 @@ tags: ["Cybersecurity", "Networking", "Cryptography"]
 tools: []
 languages: ["Python"]
 frameworks: ["Flask", "PyQt6"]
-type: software
+type: ['software']
 githubUrl: "https://github.com/Ethan-Olowo/secure_remote_com"
 coverImage: ""
 order: 4
