@@ -20,23 +20,31 @@ const base = '';
 ---
 
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0B0F14" id="theme-color-meta" />
  
-    <!-- Apply saved theme before first paint to prevent flash -->
+    <!-- Resolve theme before first paint: saved choice first, otherwise system preference -->
     <script is:inline>
       (function () {
         try {
           var saved = localStorage.getItem('theme');
-          // Default is always dark unless user has explicitly chosen light
-          var theme = saved === 'light' ? 'light' : 'dark';
+          var prefersLight =
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-color-scheme: light)').matches;
+          var theme = saved === 'light' || saved === 'dark'
+            ? saved
+            : (prefersLight ? 'light' : 'dark');
           var html = document.documentElement;
           html.classList.remove('dark', 'light');
           html.classList.add(theme);
+          var meta = document.getElementById('theme-color-meta');
+          if (meta) {
+            meta.setAttribute('content', theme === 'light' ? '#f7efe9' : '#0B0F14');
+          }
         } catch (e) {}
       })();
     </script>
