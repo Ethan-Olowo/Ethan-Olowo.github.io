@@ -1,8 +1,13 @@
 ---
 title: "DonorLink: Transparency-Focused Donation Platform"
 description: "Secure donation platform integrating MPESA Daraja API for real-time payment validation and fraud prevention. Managed data persistence with Firebase for transparent, audit-ready records."
-tags: ["Flutter", "Firebase", "MPESA Daraja API"]
+tags: ["Fintech", "Donation Platform"]
+tools: ["Firebase", "MPESA Daraja API"]
+languages: ["Dart"]
+frameworks: ["Flutter"]
 githubUrl: "https://github.com/Ethan-Olowo/DonorLink"
+type: ['software']
+
 coverImage: ""
 order: 3
 featured: true

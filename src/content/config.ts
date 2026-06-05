@@ -47,6 +47,15 @@ const projects = defineCollection({
     /** Tech stack tags */
     tags: z.array(z.string()).default([]),
 
+    /** Tools used in project */
+    tools: z.array(z.string()).default([]),
+
+    /** Languages used in project */
+    languages: z.array(z.string()).default([]),
+
+    /** Frameworks and libraries used in project */
+    frameworks: z.array(z.string()).default([]),
+
     /** Link to GitHub repository */
     githubUrl: z.string().url().optional(),
 
@@ -64,7 +73,28 @@ const projects = defineCollection({
 
     /** Whether to show in project listings */
     draft: z.boolean().default(false),
+
+    type: z.array(z.enum(['software', 'data-science', 'ai-ml', 'other'])).default(['software']),
   }),
 });
 
-export const collections = { blog, projects };
+/**
+ * Certifications collection
+ * Usage: create MD files in src/content/certifications/
+ */
+const certifications = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    issuer: z.string(),
+    dateCompleted: z.coerce.date(),
+    badgeImage: z.string().optional(),
+    credentialUrl: z.string().url().optional(),
+    tags: z.array(z.string()).default([]),
+    tools: z.array(z.string()).default([]),
+    languages: z.array(z.string()).default([]),
+    frameworks: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, projects, certifications };

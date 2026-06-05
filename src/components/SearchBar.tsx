@@ -13,7 +13,7 @@
  */
 
 import { useState, useMemo, useCallback, useRef, useId } from 'react';
-import Fuse from 'fuse.js';
+import Fuse, { type IFuseOptions, type FuseResultMatch } from 'fuse.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import BlogCard from './BlogCard';
 import ProjectCard from './ProjectCard';
@@ -24,9 +24,12 @@ export interface SearchItem {
   title: string;
   description: string;
   tags: string[];
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
   excerpt?: string;
   // blog-only
-  date?: string;
+  date?: string | Date;
   readingTime?: number | null;
   coverImage?: string | null;
   // project-only
@@ -34,6 +37,7 @@ export interface SearchItem {
   liveUrl?: string;
   featured?: boolean;
   order?: number;
+  type?: string[];
 }
 
 interface SearchBarProps {
@@ -43,12 +47,13 @@ interface SearchBarProps {
 }
 
 // ── Fuse config ────────────────────────────────────────────────────────────
-const FUSE_OPTIONS: Fuse.IFuseOptions<SearchItem> = {
+const FUSE_OPTIONS: IFuseOptions<SearchItem> = {
   keys: [
-    { name: 'title',       weight: 0.45 },
-    { name: 'tags',        weight: 0.30 },
-    { name: 'description', weight: 0.20 },
-    { name: 'excerpt',     weight: 0.05 },
+    { name: 'title',        weight: 0.40 },
+    { name: 'technologies', weight: 0.30 },
+    { name: 'tags',         weight: 0.15 },
+    { name: 'description',  weight: 0.10 },
+    { name: 'excerpt',      weight: 0.05 },
   ],
   threshold:        0.35,   // 0 = exact, 1 = match anything
   includeScore:     true,
@@ -62,7 +67,7 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<SearchItem> = {
 /** Wraps matched character ranges in <mark> for the title display. */
 function highlightText(
   text: string,
-  matches: readonly Fuse.FuseResultMatch[] | undefined,
+  matches: readonly FuseResultMatch[] | undefined,
   key: string,
 ): React.ReactNode {
   if (!matches) return text;
@@ -101,42 +106,51 @@ export default function SearchBar({
   emptyMessage = 'No results found.',
 }: SearchBarProps) {
   const [query, setQuery]       = useState('');
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const inputRef                = useRef<HTMLInputElement>(null);
   const searchId                = useId();
 
   // Build Fuse index once (memoised — only rebuilds if items reference changes)
   const fuse = useMemo(() => new Fuse(items, FUSE_OPTIONS), [items]);
 
-  // All unique tags, sorted by frequency
-  const allTags = useMemo(() => {
+  // All unique filter options (tags for blog, type for project)
+  const allFilterOptions = useMemo(() => {
+    if (type === 'project') {
+      const allTypes = items.flatMap(item => item.type ?? []);
+      const uniqueTypes = Array.from(new Set(allTypes));
+      return uniqueTypes.sort();
+    }
     const freq: Record<string, number> = {};
     items.forEach(item => item.tags.forEach(t => { freq[t] = (freq[t] ?? 0) + 1; }));
     return Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([t]) => t);
-  }, [items]);
+  }, [items, type]);
 
-  // Fuzzy search + tag gate
+  // Fuzzy search + filter gate
   const { results, fuseMatches } = useMemo(() => {
     let pool = items;
-    let matches: Map<string, Fuse.FuseResultMatch[]> = new Map();
+    let matches: Map<string, FuseResultMatch[]> = new Map();
 
     if (query.trim().length >= 2) {
       const raw = fuse.search(query.trim());
       pool = raw.map(r => r.item);
       raw.forEach(r => {
-        if (r.matches) matches.set(r.item.slug, r.matches as Fuse.FuseResultMatch[]);
+        if (r.matches) matches.set(r.item.slug, r.matches as FuseResultMatch[]);
       });
     }
 
-    if (activeTag) {
-      pool = pool.filter(item => item.tags.includes(activeTag));
+    if (activeFilter) {
+      if (type === 'project') {
+        pool = pool.filter(item => item.type?.includes(activeFilter));
+      } else {
+        pool = pool.filter(item => item.tags.includes(activeFilter));
+      }
     }
 
     return { results: pool, fuseMatches: matches };
-  }, [query, activeTag, fuse, items]);
+  }, [query, activeFilter, fuse, items, type]);
 
-  const handleTagClick = useCallback((tag: string) => {
-    setActiveTag(prev => (prev === tag ? null : tag));
+  const handleFilterClick = useCallback((filter: string) => {
+    setActiveFilter(prev => (prev === filter ? null : filter));
   }, []);
 
   const clearSearch = useCallback(() => {
@@ -145,6 +159,11 @@ export default function SearchBar({
   }, []);
 
   const hasQuery = query.trim().length > 0;
+
+  const formatFilterLabel = (filter: string) => {
+    if (filter === 'ai-ml') return 'AI / ML';
+    return filter.replace('-', ' ');
+  };
 
   return (
     <div>
@@ -246,11 +265,11 @@ export default function SearchBar({
       <div
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem' }}
         role="group"
-        aria-label="Filter by tag"
+        aria-label={type === 'blog' ? "Filter by tag" : "Filter by project type"}
       >
         <button
-          onClick={() => setActiveTag(null)}
-          aria-pressed={activeTag === null}
+          onClick={() => setActiveFilter(null)}
+          aria-pressed={activeFilter === null}
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '0.71rem',
@@ -258,20 +277,20 @@ export default function SearchBar({
             letterSpacing: '0.04em',
             padding: '0.28rem 0.75rem',
             borderRadius: '100px',
-            border: `1px solid ${activeTag === null ? 'var(--accent)' : 'var(--border)'}`,
-            background: activeTag === null ? 'var(--accent-dim)' : 'transparent',
-            color: activeTag === null ? 'var(--accent)' : 'var(--muted)',
+            border: `1px solid ${activeFilter === null ? 'var(--accent)' : 'var(--border)'}`,
+            background: activeFilter === null ? 'var(--accent-dim)' : 'transparent',
+            color: activeFilter === null ? 'var(--accent)' : 'var(--muted)',
             cursor: 'pointer',
             transition: 'all 0.2s',
           }}
         >
           All
         </button>
-        {allTags.map(tag => (
+        {allFilterOptions.map(filter => (
           <button
-            key={tag}
-            onClick={() => handleTagClick(tag)}
-            aria-pressed={activeTag === tag}
+            key={filter}
+            onClick={() => handleFilterClick(filter)}
+            aria-pressed={activeFilter === filter}
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '0.71rem',
@@ -279,14 +298,15 @@ export default function SearchBar({
               letterSpacing: '0.03em',
               padding: '0.28rem 0.75rem',
               borderRadius: '100px',
-              border: `1px solid ${activeTag === tag ? 'var(--accent)' : 'var(--border)'}`,
-              background: activeTag === tag ? 'var(--accent-dim)' : 'transparent',
-              color: activeTag === tag ? 'var(--accent)' : 'var(--muted)',
+              border: `1px solid ${activeFilter === filter ? 'var(--accent)' : 'var(--border)'}`,
+              background: activeFilter === filter ? 'var(--accent-dim)' : 'transparent',
+              color: activeFilter === filter ? 'var(--accent)' : 'var(--muted)',
               cursor: 'pointer',
               transition: 'all 0.2s',
+              textTransform: type === 'project' ? (filter === 'ai-ml' ? 'none' : 'capitalize') : 'none',
             }}
           >
-            {tag}
+            {formatFilterLabel(filter)}
           </button>
         ))}
       </div>
@@ -314,8 +334,8 @@ export default function SearchBar({
             "{query.trim()}"
           </span>
         )}
-        {activeTag && <span style={{ color: 'var(--border)' }}>·</span>}
-        {activeTag && <span>{activeTag}</span>}
+        {activeFilter && <span style={{ color: 'var(--border)' }}>·</span>}
+        {activeFilter && <span>{formatFilterLabel(activeFilter)}</span>}
       </p>
 
       {/* ── Results grid ──────────────────────────────────────── */}
@@ -344,9 +364,9 @@ export default function SearchBar({
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', color: 'var(--muted)' }}>
               {emptyMessage}
             </p>
-            {(hasQuery || activeTag) && (
+            {(hasQuery || activeFilter) && (
               <button
-                onClick={() => { setQuery(''); setActiveTag(null); }}
+                onClick={() => { setQuery(''); setActiveFilter(null); }}
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.75rem',
@@ -401,11 +421,15 @@ export default function SearchBar({
                       title={item.title}
                       description={item.description}
                       tags={item.tags}
+                      languages={item.languages}
+                      frameworks={item.frameworks}
+                      tools={item.tools}
                       githubUrl={item.githubUrl}
                       liveUrl={item.liveUrl}
                       slug={item.slug}
                       index={i}
                       highlightedTitle={highlightedTitle}
+                      type={item.type as any}
                     />
                   )}
                 </motion.div>

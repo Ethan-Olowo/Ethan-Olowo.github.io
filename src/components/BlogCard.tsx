@@ -172,10 +172,10 @@ export default function BlogCard({
       flexDirection: "column",
       gap: "0.875rem",
       height: "100%",
-      position: "relative",
+      position: "relative" as const,
       overflow: "hidden",
       transition: "border-color 0.25s, box-shadow 0.25s",
-    },
+    } as any,
     onHoverStart: (e: any) => {
       const el = (e.target as HTMLElement).closest(
         "article, div",

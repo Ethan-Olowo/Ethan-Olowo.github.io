@@ -1,7 +1,11 @@
 ---
 title: "Machine Learning API Deployment with Flask, Docker & NGINX"
 description: "Multi-model machine learning API with Flask, integrating classification, clustering, and recommendation systems, and deployed it using Docker, Gunicorn, and NGINX for scalable, production-ready access."
-tags: ["Python", "Flask", "Docker", "NGINX", "Machine Learning", "REST API"]
+tags: ["Machine Learning", "REST API", "MLOps"]
+tools: ["Docker", "NGINX", "Gunicorn"]
+languages: ["Python"]
+frameworks: ["Flask", "Scikit-learn"]
+type: ['software', 'ai-ml']
 
 coverImage: ""
 order: 9

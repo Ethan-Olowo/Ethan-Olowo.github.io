@@ -13,12 +13,15 @@ const projectItems = allProjects.map((p) => ({
   title:       p.data.title,
   description: p.data.description,
   tags:        p.data.tags,
+  languages:   p.data.languages,
+  frameworks:  p.data.frameworks,
+  tools:       p.data.tools,
   githubUrl:   p.data.githubUrl ?? '',
   liveUrl:     p.data.liveUrl   ?? '',
   featured:    p.data.featured,
   order:       p.data.order,
+  type:        p.data.type,
   excerpt:     p.body
-    .replace(/```[\s\S]*?```/g, '')
     .replace(/[#*_`>[\]|]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
@@ -28,7 +31,7 @@ const projectItems = allProjects.map((p) => ({
 
 <Layout
   title="Projects — Ethan Olowo"
-  description="A collection of full-stack, machine learning, and computer vision projects."
+  description="A collection of full-stack, machine learning, and data science projects."
 >
   <section class="page-section">
     <div class="container">
@@ -38,8 +41,8 @@ const projectItems = allProjects.map((p) => ({
         <p class="page-label">Work</p>
         <h1 class="page-title">Projects</h1>
         <p class="page-sub">
-          Systems I've designed, built, and shipped — spanning full-stack web, computer vision,
-          ML pipelines, and applied AI tooling.
+          Systems I've designed and built spanning software, data science,
+          ML, and applied AI.
         </p>
       </header>
 
@@ -48,6 +51,7 @@ const projectItems = allProjects.map((p) => ({
         <SearchBar
           client:load
           items={projectItems}
+          type="project"
           emptyMessage="No projects found."
         />
       </div>

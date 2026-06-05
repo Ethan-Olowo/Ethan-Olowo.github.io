@@ -68,6 +68,9 @@ const staticPages = [
     title:       'Home',
     description: 'Full-Stack Developer & Data Scientist — building intelligent, scalable systems.',
     tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
     excerpt:     'Full-Stack Developer, Data Scientist, Machine Learning, Computer Vision, Applied AI.',
     url:         '/',
   },
@@ -77,6 +80,9 @@ const staticPages = [
     title:       'About',
     description: 'Background, skills, and the story behind the work.',
     tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
     excerpt:     'About me — Business Information Technology, AI for Science, applied machine learning.',
     url:         '/about',
   },
@@ -86,6 +92,9 @@ const staticPages = [
     title:       'Contact',
     description: 'Get in touch about job opportunities, project collaboration, or anything else.',
     tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
     excerpt:     'Contact form, email, LinkedIn, GitHub. Available for full-time roles and freelance work.',
     url:         '/contact',
   },
@@ -95,6 +104,9 @@ const staticPages = [
     title:       'Projects',
     description: 'A collection of full-stack, ML, and computer vision projects.',
     tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
     excerpt:     'Projects index — computer vision, machine learning, full-stack, Rust, Python.',
     url:         '/projects',
   },
@@ -104,8 +116,23 @@ const staticPages = [
     title:       'Blog',
     description: 'Writing about full-stack development, machine learning, and applied AI.',
     tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
     excerpt:     'Blog posts on Python, Rust, Astro, OCR, computer vision, LLMs, and more.',
     url:         '/blog',
+  },
+  {
+    id:          'page-certifications',
+    type:        'page' as const,
+    title:       'Certifications',
+    description: 'Professional certifications and badges in Cloud Computing, AI, and Software Engineering.',
+    tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
+    excerpt:     'Certifications index — AWS, IBM, Cisco, AI fundamentals, Cloud computing.',
+    url:         '/certifications',
   },
 ];
 
@@ -145,14 +172,44 @@ export const GET: APIRoute = async () => {
         title:       project.data.title,
         description: project.data.description,
         tags:        project.data.tags,
+        languages:   project.data.languages,
+        frameworks:  project.data.frameworks,
+        tools:       project.data.tools,
         excerpt,
         url:         `/projects/${project.slug}`,
       };
     })
   );
 
+  // ── Certifications ─────────────────────────────────────────────────────────
+  const certs = await getCollection('certifications');
+
+  const certificationEntries = await Promise.all(
+    certs.map(async (cert) => {
+      const excerpt = stripMarkdown(cert.body).slice(0, 220);
+
+      return {
+        id:          `cert-${cert.slug}`,
+        type:        'certification' as const,
+        title:       cert.data.title,
+        description: cert.data.issuer,
+        tags:        cert.data.tags,
+        languages:   cert.data.languages,
+        frameworks:  cert.data.frameworks,
+        tools:       cert.data.tools,
+        excerpt,
+        url:         `/certifications?q=${encodeURIComponent(cert.data.title)}`,
+      };
+    })
+  );
+
   // ── Combine and emit ───────────────────────────────────────────────────────
-  const index = [...blogEntries, ...projectEntries, ...staticPages];
+  const index = [
+    ...blogEntries,
+    ...projectEntries,
+    ...certificationEntries,
+    ...staticPages
+  ];
 
   return new Response(JSON.stringify(index), {
     headers: {

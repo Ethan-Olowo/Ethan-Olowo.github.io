@@ -14,7 +14,10 @@ interface Props {
   githubUrl?: string;
   liveUrl?: string;
   coverImage?: string;
-  kind: 'blog' | 'project';
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
+  kind: 'blog' | 'project' | 'profile' | 'other';
   backHref: string;
   backLabel: string;
 }
@@ -24,6 +27,9 @@ const {
   description,
   date,
   tags = [],
+  languages = [],
+  frameworks = [],
+  tools = [],
   readingTime,
   githubUrl,
   liveUrl,
@@ -32,6 +38,9 @@ const {
   backHref,
   backLabel,
 } = Astro.props;
+
+// Combine split technologies for display
+const combinedTech = Array.from(new Set([...languages, ...frameworks, ...tools]));
 
 const formattedDate = date
   ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -97,14 +106,26 @@ const formattedDate = date
             </div>
           )}
 
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div class="prose-tags" role="list" aria-label="Tags">
-              {tags.map(tag => (
-                <span class="prose-tag" role="listitem">{tag}</span>
-              ))}
-            </div>
-          )}
+          {/* Tags & Tech */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {/* Concept Tags */}
+            {tags.length > 0 && (
+              <div class="prose-tags" role="list" aria-label="Project domains">
+                {tags.map(tag => (
+                  <span class="prose-tag prose-tag--concept" role="listitem">{tag}</span>
+                ))}
+              </div>
+            )}
+
+            {/* Technologies */}
+            {combinedTech.length > 0 && (
+              <div class="prose-tags" role="list" aria-label="Technologies used">
+                {combinedTech.map(tech => (
+                  <span class="prose-tag" role="listitem">{tech}</span>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Project action links */}
           {(githubUrl || liveUrl) && (
@@ -326,6 +347,16 @@ const formattedDate = date
     border: 1px solid var(--accent-glow);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
+  }
+
+  .prose-tag--concept {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-size: 0.625rem;
+    font-weight: 600;
   }
 
   .prose-links {
