@@ -1,7 +1,10 @@
 ---
 title: "Trip Calculator: Fuel & Cost Estimation Tool"
 description: "Trip planning tool that calculates fuel consumption and travel cost using real-time distance data from the OpenRouteService API, with Excel export and activity tracking."
-tags: ["Python", "PySide6", "OpenRouteService API", "Openpyxl"]
+tags: ["Utility", "Logistics"]
+tools: ["OpenRouteService API", "Openpyxl", "Requests"]
+languages: ["Python"]
+frameworks: ["PySide6"]
 type: software
 githubUrl: "https://github.com/Ethan-Olowo/TripCalculator"
 coverImage: ""

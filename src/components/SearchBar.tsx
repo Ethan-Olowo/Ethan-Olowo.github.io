@@ -24,6 +24,9 @@ export interface SearchItem {
   title: string;
   description: string;
   tags: string[];
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
   excerpt?: string;
   // blog-only
   date?: string;
@@ -45,10 +48,11 @@ interface SearchBarProps {
 // ── Fuse config ────────────────────────────────────────────────────────────
 const FUSE_OPTIONS: Fuse.IFuseOptions<SearchItem> = {
   keys: [
-    { name: 'title',       weight: 0.45 },
-    { name: 'tags',        weight: 0.30 },
-    { name: 'description', weight: 0.20 },
-    { name: 'excerpt',     weight: 0.05 },
+    { name: 'title',        weight: 0.40 },
+    { name: 'technologies', weight: 0.30 },
+    { name: 'tags',         weight: 0.15 },
+    { name: 'description',  weight: 0.10 },
+    { name: 'excerpt',      weight: 0.05 },
   ],
   threshold:        0.35,   // 0 = exact, 1 = match anything
   includeScore:     true,
@@ -401,6 +405,9 @@ export default function SearchBar({
                       title={item.title}
                       description={item.description}
                       tags={item.tags}
+                      languages={item.languages}
+                      frameworks={item.frameworks}
+                      tools={item.tools}
                       githubUrl={item.githubUrl}
                       liveUrl={item.liveUrl}
                       slug={item.slug}
