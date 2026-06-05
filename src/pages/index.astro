@@ -6,14 +6,27 @@ import { getCollection } from 'astro:content';
 
 // Fetch featured projects from the content collection
 const allProjects = await getCollection('projects');
+const allCertifications = await getCollection('certifications');
+
 const featuredProjects = allProjects
   .filter((p) => p.data.featured && !p.data.draft)
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
-// Aggregate unique items for each category
-const allLanguages = Array.from(new Set(allProjects.flatMap(p => p.data.languages || []))).sort();
-const allFrameworks = Array.from(new Set(allProjects.flatMap(p => p.data.frameworks || []))).sort();
-const allTools = Array.from(new Set(allProjects.flatMap(p => p.data.tools || []))).sort();
+// Aggregate unique items for each category from both projects and certifications
+const allLanguages = Array.from(new Set([
+  ...allProjects.flatMap(p => p.data.languages || []),
+  ...allCertifications.flatMap(c => c.data.languages || [])
+])).sort();
+
+const allFrameworks = Array.from(new Set([
+  ...allProjects.flatMap(p => p.data.frameworks || []),
+  ...allCertifications.flatMap(c => c.data.frameworks || [])
+])).sort();
+
+const allTools = Array.from(new Set([
+  ...allProjects.flatMap(p => p.data.tools || []),
+  ...allCertifications.flatMap(c => c.data.tools || [])
+])).sort();
 ---
 
 <Layout>

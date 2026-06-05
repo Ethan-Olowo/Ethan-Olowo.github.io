@@ -122,6 +122,18 @@ const staticPages = [
     excerpt:     'Blog posts on Python, Rust, Astro, OCR, computer vision, LLMs, and more.',
     url:         '/blog',
   },
+  {
+    id:          'page-certifications',
+    type:        'page' as const,
+    title:       'Certifications',
+    description: 'Professional certifications and badges in Cloud Computing, AI, and Software Engineering.',
+    tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
+    excerpt:     'Certifications index — AWS, IBM, Cisco, AI fundamentals, Cloud computing.',
+    url:         '/certifications',
+  },
 ];
 
 export const GET: APIRoute = async () => {
@@ -169,8 +181,35 @@ export const GET: APIRoute = async () => {
     })
   );
 
+  // ── Certifications ─────────────────────────────────────────────────────────
+  const certs = await getCollection('certifications');
+
+  const certificationEntries = await Promise.all(
+    certs.map(async (cert) => {
+      const excerpt = stripMarkdown(cert.body).slice(0, 220);
+
+      return {
+        id:          `cert-${cert.slug}`,
+        type:        'certification' as const,
+        title:       cert.data.title,
+        description: cert.data.issuer,
+        tags:        cert.data.tags,
+        languages:   cert.data.languages,
+        frameworks:  cert.data.frameworks,
+        tools:       cert.data.tools,
+        excerpt,
+        url:         `/certifications?q=${encodeURIComponent(cert.data.title)}`,
+      };
+    })
+  );
+
   // ── Combine and emit ───────────────────────────────────────────────────────
-  const index = [...blogEntries, ...projectEntries, ...staticPages];
+  const index = [
+    ...blogEntries,
+    ...projectEntries,
+    ...certificationEntries,
+    ...staticPages
+  ];
 
   return new Response(JSON.stringify(index), {
     headers: {
