@@ -11,6 +11,7 @@ coverImage: ""
 order: 8
 featured: false
 draft: false
+type: software
 ---
 
 ## Overview

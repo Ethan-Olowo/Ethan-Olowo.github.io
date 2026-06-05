@@ -5,6 +5,7 @@ tags: ["Time Series", "Deep Learning"]
 tools: ["Power BI"]
 languages: ["Python"]
 frameworks: ["Pandas", "Matplotlib", "TensorFlow"]
+type: data-science
 
 coverImage: ""
 order: 7

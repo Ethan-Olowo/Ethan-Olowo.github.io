@@ -5,6 +5,7 @@ tags: ["IoT", "Healthcare", "Embedded Systems"]
 tools: ["Git"]
 languages: ["C++"]
 frameworks: ["Arduino"]
+type: software
 
 coverImage: ""
 order: 2

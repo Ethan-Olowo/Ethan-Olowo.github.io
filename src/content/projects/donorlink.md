@@ -6,6 +6,8 @@ tools: ["Firebase", "MPESA Daraja API"]
 languages: ["Dart"]
 frameworks: ["Flutter"]
 githubUrl: "https://github.com/Ethan-Olowo/DonorLink"
+type: software
+
 coverImage: ""
 order: 3
 featured: true
