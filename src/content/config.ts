@@ -97,4 +97,21 @@ const certifications = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, certifications };
+/**
+ * Experience collection
+ * Usage: create MD files in src/content/experience/
+ */
+const experience = defineCollection({
+  type: 'content',
+  schema: z.object({
+    role: z.string(),
+    company: z.string(),
+    dateRange: z.string(),
+    order: z.number().default(99),
+    tools: z.array(z.string()).default([]),
+    languages: z.array(z.string()).default([]),
+    frameworks: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, projects, certifications, experience };

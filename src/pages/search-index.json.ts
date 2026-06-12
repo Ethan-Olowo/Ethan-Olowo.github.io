@@ -134,6 +134,18 @@ const staticPages = [
     excerpt:     'Certifications index — AWS, IBM, Cisco, AI fundamentals, Cloud computing.',
     url:         '/certifications',
   },
+  {
+    id:          'page-skills',
+    type:        'page' as const,
+    title:       'Skills',
+    description: 'Search and explore my technical skills across projects and experience.',
+    tags:        [],
+    languages:   [],
+    frameworks:  [],
+    tools:       [],
+    excerpt:     'Search skills — Python, React, Machine Learning, Data Science, AWS.',
+    url:         '/skills',
+  },
 ];
 
 export const GET: APIRoute = async () => {
@@ -153,6 +165,9 @@ export const GET: APIRoute = async () => {
         title:       post.data.title,
         description: post.data.description,
         tags:        post.data.tags,
+        languages:   [],
+        frameworks:  [],
+        tools:       [],
         excerpt,
         url:         `/blog/${post.slug}`,
       };
@@ -203,11 +218,34 @@ export const GET: APIRoute = async () => {
     })
   );
 
+  // ── Experience ──────────────────────────────────────────────────────────────
+  const experiences = await getCollection('experience');
+
+  const experienceEntries = await Promise.all(
+    experiences.map(async (exp) => {
+      const excerpt = stripMarkdown(exp.body).slice(0, 220);
+
+      return {
+        id:          `exp-${exp.slug}`,
+        type:        'experience' as const,
+        title:       exp.data.role,
+        description: exp.data.company,
+        tags:        [],
+        languages:   exp.data.languages,
+        frameworks:  exp.data.frameworks,
+        tools:       exp.data.tools,
+        excerpt,
+        url:         `/about#experience`,
+      };
+    })
+  );
+
   // ── Combine and emit ───────────────────────────────────────────────────────
   const index = [
     ...blogEntries,
     ...projectEntries,
     ...certificationEntries,
+    ...experienceEntries,
     ...staticPages
   ];
 

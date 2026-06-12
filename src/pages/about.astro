@@ -1,8 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProseLayout from "../layouts/ProseLayout.astro";
----
+import { getCollection } from "astro:content";
 
+const experience = await getCollection("experience");
+const sortedExperience = experience.sort((a, b) => a.data.order - b.data.order);
+---
 
 <Layout
   title="About Me"
@@ -41,15 +44,90 @@ import ProseLayout from "../layouts/ProseLayout.astro";
       </p>
 
       <h3 id="experience">Work Experience</h3>
-      <ul>
-        <li>
-          <strong>Pegasus Technologies (2025):</strong> Enhanced enterprise data systems by optimizing performance, building robust data pipelines, and architecting scalable software. Enabled secure, high-throughput transaction processing and set the stage for future ML integrations.
-        </li>
-        <li>
-          <strong>Kawempe Home Care (2024):</strong> Volunteered in community health initiatives.
-        </li>
-      </ul>
-    </p>
+      <div class="experience-list">
+        {sortedExperience.map(async (entry) => {
+          const { Content } = await entry.render();
+          const stack = [...entry.data.languages, ...entry.data.frameworks, ...entry.data.tools];
+          
+          return (
+            <div class="experience-item">
+              <div class="experience-header">
+                <strong>{entry.data.company} ({entry.data.dateRange})</strong>
+                <span class="experience-role">{entry.data.role}</span>
+              </div>
+              <div class="experience-body">
+                <Content />
+              </div>
+              {stack.length > 0 && (
+                <div class="experience-stack">
+                  {stack.map(tech => (
+                    <a href={`/skills?q=${encodeURIComponent(tech)}`} class="tech-pill-small tech-pill-link">
+                      {tech}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   </ProseLayout>
 </Layout>
+
+<style>
+  .experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  .experience-item {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+  .experience-item:last-child {
+    border-bottom: none;
+  }
+  .experience-header {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .experience-role {
+    opacity: 0.7;
+    font-size: 0.9rem;
+  }
+  .experience-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .experience-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tech-pill-small {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0.8;
+  }
+  .tech-pill-link {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+  }
+  .tech-pill-link:hover {
+    background: var(--accent-dim, rgba(59, 130, 246, 0.1));
+    border-color: var(--accent, #3b82f6);
+    color: var(--accent, #3b82f6);
+    opacity: 1;
+  }
+</style>

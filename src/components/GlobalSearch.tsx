@@ -23,26 +23,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ── Types ──────────────────────────────────────────────────────────────────
 export interface SearchEntry {
   id: string;
-  type: 'blog' | 'project' | 'page' | 'certification';
+  type: 'blog' | 'project' | 'page' | 'certification' | 'experience';
   title: string;
   description: string;
   tags: string[];
-  technologies?: string[];
+  languages?: string[];
+  frameworks?: string[];
+  tools?: string[];
   excerpt: string;
   url: string;
 }
 
-type GroupKey = 'blog' | 'project' | 'page' | 'certification';
+type GroupKey = 'blog' | 'project' | 'page' | 'certification' | 'experience';
 type FilterType = 'all' | GroupKey;
 
 const GROUP_LABELS: Record<GroupKey, string> = {
   blog:          'Blog',
   project:       'Projects',
   certification: 'Certifications',
+  experience:    'Experience',
   page:          'Pages',
 };
 
-const GROUP_ORDER: GroupKey[] = ['blog', 'project', 'certification', 'page'];
+const GROUP_ORDER: GroupKey[] = ['blog', 'project', 'experience', 'certification', 'page'];
 
 // ── Fuse config ────────────────────────────────────────────────────────────
 const FUSE_OPTIONS: IFuseOptions<SearchEntry> = {
@@ -88,6 +91,11 @@ function TypeIcon({ type }: { type: GroupKey }) {
     <svg {...props}>
       <circle cx="8" cy="6" r="3.5" />
       <path d="M6.5 9.2 5.5 14l2.5-1.7L10.5 14l-1-4.8" />
+    </svg>
+  );
+  if (type === 'experience') return (
+    <svg {...props}>
+      <path d="M2 14V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v10M2 14h12M6 14v-4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v4" />
     </svg>
   );
   return (
@@ -389,7 +397,10 @@ export default function GlobalSearch() {
               <HighlightedText text={item.description} matches={matches} field="description" />
             </p>
             {/* Tags & Tech */}
-            {(item.tags.length > 0 || (item.technologies && item.technologies.length > 0)) && (
+            {((item.tags && item.tags.length > 0) || 
+              (item.languages && item.languages.length > 0) ||
+              (item.frameworks && item.frameworks.length > 0) ||
+              (item.tools && item.tools.length > 0)) && (
               <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
                 {item.tags.slice(0, 3).map((tag: string) => (
                   <span
@@ -409,7 +420,7 @@ export default function GlobalSearch() {
                     {tag}
                   </span>
                 ))}
-                {item.technologies?.slice(0, 3).map((tech: string) => (
+                {[...(item.languages || []), ...(item.frameworks || []), ...(item.tools || [])].slice(0, 3).map((tech: string) => (
                   <span
                     key={tech}
                     style={{
