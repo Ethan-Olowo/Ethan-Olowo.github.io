@@ -7,6 +7,7 @@ import { getCollection } from 'astro:content';
 // Fetch featured projects from the content collection
 const allProjects = await getCollection('projects');
 const allCertifications = await getCollection('certifications');
+const allExperience = await getCollection('experience');
 
 const featuredProjects = allProjects
   .filter((p) => p.data.featured && !p.data.draft)
@@ -15,17 +16,20 @@ const featuredProjects = allProjects
 // Aggregate unique items for each category from both projects and certifications
 const allLanguages = Array.from(new Set([
   ...allProjects.flatMap(p => p.data.languages || []),
-  ...allCertifications.flatMap(c => c.data.languages || [])
+  ...allCertifications.flatMap(c => c.data.languages || []),
+  ...allExperience.flatMap(e => e.data.languages || [])
 ])).sort();
 
 const allFrameworks = Array.from(new Set([
   ...allProjects.flatMap(p => p.data.frameworks || []),
-  ...allCertifications.flatMap(c => c.data.frameworks || [])
+  ...allCertifications.flatMap(c => c.data.frameworks || []),
+  ...allExperience.flatMap(e => e.data.frameworks || [])
 ])).sort();
 
 const allTools = Array.from(new Set([
   ...allProjects.flatMap(p => p.data.tools || []),
-  ...allCertifications.flatMap(c => c.data.tools || [])
+  ...allCertifications.flatMap(c => c.data.tools || []),
+  ...allExperience.flatMap(e => e.data.tools || [])
 ])).sort();
 ---
 
@@ -95,21 +99,45 @@ const allTools = Array.from(new Set([
         <div class="tech-category">
           <h3 class="category-title">Languages</h3>
           <div class="tech-cloud">
-            {allLanguages.map((item) => <span class="tech-pill">{item}</span>)}
+            {allLanguages.map((item) => (
+              <a 
+                href={`/skills?q=${encodeURIComponent(item)}`} 
+                class="tech-pill tech-pill-link"
+                title={`View all projects and experience with ${item}`}
+              >
+                {item}
+              </a>
+            ))}
           </div>
         </div>
 
         <div class="tech-category">
           <h3 class="category-title">Frameworks & Libraries</h3>
           <div class="tech-cloud">
-            {allFrameworks.map((item) => <span class="tech-pill">{item}</span>)}
+            {allFrameworks.map((item) => (
+              <a 
+                href={`/skills?q=${encodeURIComponent(item)}`} 
+                class="tech-pill tech-pill-link"
+                title={`View all projects and experience with ${item}`}
+              >
+                {item}
+              </a>
+            ))}
           </div>
         </div>
 
         <div class="tech-category">
           <h3 class="category-title">Tools & Platforms</h3>
           <div class="tech-cloud">
-            {allTools.map((item) => <span class="tech-pill">{item}</span>)}
+            {allTools.map((item) => (
+              <a 
+                href={`/skills?q=${encodeURIComponent(item)}`} 
+                class="tech-pill tech-pill-link"
+                title={`View all projects and experience with ${item}`}
+              >
+                {item}
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -436,6 +464,7 @@ const allTools = Array.from(new Set([
     border-radius: 4px;
     letter-spacing: 0.02em;
     transition: color 0.2s, border-color 0.2s;
+    text-decoration: none;
   }
 
   .tech-pill:hover {
