@@ -7,7 +7,7 @@ languages: ["Python", "JavaScript", "SQL"]
 frameworks: ["FastAPI", "ReactJS", "Sentence Transformers"]
 type: ['software', 'ai-ml']
 
-githubUrl: "https://github.com/Ethan-Olowo/Degree-Recommender-Backend"
+githubUrl: "https://github.com/Ethan-Olowo/degree-recommender"
 coverImage: ""
 order: 1
 featured: true
@@ -29,9 +29,8 @@ Students transitioning from secondary to higher education often lack access to r
 
 The platform follows a modular **three-tier architecture** designed for scalability and clear separation of concerns. You can explore the specific implementations across the following repositories:
 
-*   **[Model & Notebooks Repo](https://github.com/Ethan-Olowo/edupath_notebooks):** Contains the data preprocessing pipelines, XGBoost training scripts, and Optuna hyperparameter tuning logic.
-*   **[Backend API Repo](https://github.com/Ethan-Olowo/Degree-Recommender-Backend):** The FastAPI core that orchestrates the recommendation engine, LLM integration, and Supabase interactions.
-*   **[Frontend UI Repo](https://github.com/Ethan-Olowo/edufind-app):** The React/TypeScript application featuring responsive dashboards and real-time visualization components.
+*   **[Model & Notebooks Repository](https://github.com/Ethan-Olowo/edupath_notebooks):** Contains the data preprocessing pipelines, XGBoost training scripts, and Optuna hyperparameter tuning logic.
+*   **[Application Repository](https://github.com/Ethan-Olowo/degree-recommender):** The Supabase database, the FastAPI core that orchestrates the recommendation engine, LLM integration, and Supabase interactions, and the React/TypeScript application featuring responsive dashboards and real-time visualization components. 
 
 ## Hybrid Recommendation Engine
 
